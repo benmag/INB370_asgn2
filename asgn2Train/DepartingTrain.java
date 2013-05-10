@@ -141,8 +141,7 @@ public class DepartingTrain {
 	 * @returns a human-readable description of the entire train
 	 */
 	public String toString() {
-		
-	
+		return null;
 	}
 
 }
