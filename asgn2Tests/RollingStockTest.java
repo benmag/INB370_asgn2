@@ -17,6 +17,7 @@ import static org.junit.Assert.*;
 public class RollingStockTest {
     private Integer defaultWeight = 50;
     private String defaultGoods = "G";
+    private String defaultClassification = "4S";
     
     @Test
     public void testFreightCarType() throws TrainException {
@@ -32,7 +33,6 @@ public class RollingStockTest {
     
     @Test
     public void testLocomotiveType() throws TrainException {
-    	Locomotive locomotive1 = new Locomotive(defaultWeight, defaultClassification)
-    
+    	Locomotive locomotive1 = new Locomotive(defaultWeight, defaultClassification);
     }
 }
