@@ -1,5 +1,5 @@
 /*
- * A simple class for exceptions thrown by railway shunting and boarding operations.
+ * TrainTests
  * 
  * @version 1.0
  * @author Ben Maggacis, Corey Thompson

@@ -18,6 +18,7 @@
  * 
  * @version 1.0
  * @author Ben Maggacis, Corey Thompson
+ * 
  */
 package asgn2Train;
 
