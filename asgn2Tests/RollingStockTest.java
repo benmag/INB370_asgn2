@@ -16,13 +16,22 @@ import static org.junit.Assert.*;
  */
 public class RollingStockTest {
     private Integer defaultWeight = 50;
+    private Integer invalidWeight = -100;
     private String defaultGoods = "G";
+    private String invalidGoods = "K";
     private String defaultClassification = "4S";
+    
     
     @Test
     public void testFreightCarType() throws TrainException {
     	FreightCar freight1 = new FreightCar(defaultWeight, defaultGoods);
         assertEquals(freight1.goodsType(), defaultGoods);
+    }
+    
+    @SuppressWarnings("unused")
+	@Test (expected=TrainException.class)
+    public void testInvalidFreightCarType() throws TrainException {
+    	FreightCar freight1 = new FreightCar(defaultWeight, invalidGoods);
     }
     
     @Test
@@ -31,8 +40,22 @@ public class RollingStockTest {
     	assertEquals(freight1.getGrossWeight(), defaultWeight);
     }
     
+    @SuppressWarnings("unused")
+    @Test (expected=TrainException.class)
+    public void testInvalidFreightCarWeight() throws TrainException {
+    	FreightCar freight1 = new FreightCar(invalidWeight, defaultGoods);
+    }
+    
     @Test
-    public void testLocomotiveType() throws TrainException {
+    public void testLocomotivePower() throws TrainException {
     	Locomotive locomotive1 = new Locomotive(defaultWeight, defaultClassification);
+    	Integer power = Integer.parseInt(defaultClassification.substring(0,1)) * 100;
+    	assertEquals(locomotive1.power(), power);
+    }
+    
+    @Test
+    public void testLocomotiveWeight() throws TrainException {
+    	Locomotive locomotive1 = new Locomotive(defaultWeight, defaultClassification);
+    	assertEquals(locomotive1.getGrossWeight(), defaultWeight);
     }
 }
