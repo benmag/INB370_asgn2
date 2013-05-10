@@ -3,21 +3,30 @@
  */
 package asgn2RollingStock;
 
+import asgn2Exceptions.TrainException;
+
 /**
  * @author Spike
  *
  */
 public abstract class RollingStock {
-	float grossWeight;
+	int grossWeight;
 	/**
+	 * @param grossWeight 
+	 * @throws TrainException 
 	 * 
 	 */
-	public RollingStock() {
+	public RollingStock(Integer grossWeight) throws TrainException {
 		// TODO Auto-generated constructor stub
+		if(grossWeight <= 0) {
+			throw new TrainException("Invalid gross weight.");
+		} else {
+			this.grossWeight = grossWeight;
+		}
 	}
         
-    public static void main(String args[]) {
-        
+    public Integer getGrossWeight() {
+		return grossWeight;
     }
 
 }

@@ -5,7 +5,8 @@
 package asgn2Tests;
 
 import asgn2Exceptions.TrainException;
-import asgn2RollingStock.FreightCar;
+import asgn2RollingStock.*;
+
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -14,20 +15,24 @@ import static org.junit.Assert.*;
  * @author Spike
  */
 public class RollingStockTest {
-    int defaultWeight = 50;
-    
-    public static void main(String args[]) {
-        
-    }
+    private Integer defaultWeight = 50;
+    private String defaultGoods = "G";
     
     @Test
     public void testFreightCarType() throws TrainException {
-	FreightCar freight1 = new FreightCar(defaultWeight, "G");
-        assertEquals(freight1.goodsType(), "G");
-        if("G".equals(freight1.goodsType())) {
-            System.out.println("Freight1 goods is correct.");
-        } else {
-            System.out.println("Freight1 goods is incorrect: " + freight1.goodsType());
-        }
+    	FreightCar freight1 = new FreightCar(defaultWeight, defaultGoods);
+        assertEquals(freight1.goodsType(), defaultGoods);
+    }
+    
+    @Test
+    public void testFreightCarWeight() throws TrainException {
+    	FreightCar freight1 = new FreightCar(defaultWeight, defaultGoods);
+    	assertEquals(freight1.getGrossWeight(), defaultWeight);
+    }
+    
+    @Test
+    public void testLocomotiveType() throws TrainException {
+    	Locomotive locomotive1 = new Locomotive(defaultWeight, defaultClassification)
+    
     }
 }

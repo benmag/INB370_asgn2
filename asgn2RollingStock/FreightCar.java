@@ -27,12 +27,12 @@ public class FreightCar extends RollingStock {
     * @throws TrainException - if the gross weight is not positive or if the goods type is invalid
     */
     public FreightCar(Integer grossWeight, String goodsType) throws TrainException {
-        if(grossWeight <= 0 || !"G".equals(goodsType) && !"R".equals(goodsType) && !"D".equals(goodsType)) {
+    	super(grossWeight);
+        if(!"G".equals(goodsType) && !"R".equals(goodsType) && !"D".equals(goodsType)) {
             //Invalid constructor arguments
-            throw new TrainException("You did not enter a valid gross weight/goods type.");
+            throw new TrainException("You did not enter a valid goods type.");
         } else {
             //Valid constructor arguments
-            this.grossWeight = grossWeight;
             this.goodsType = goodsType;
         }
     }
@@ -58,5 +58,4 @@ public class FreightCar extends RollingStock {
     public String toString() {
         return null;      
     }
-
 }
