@@ -42,4 +42,14 @@ public class Locomotive extends RollingStock {
 		Integer power = Integer.parseInt(powerString);
 		return (power * 100);
 	}
+
+
+	/*
+	 * Returns a human-readable description of the locomotive. This has the form "Loco(x)" where x is the locomotive's two-character classification code
+	 * @returns a human-readable description of the locomotive
+	 */
+	@Override
+	public String toString() {
+		return "Loco("+  this.classification + ")";
+	}
 }

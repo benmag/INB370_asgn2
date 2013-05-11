@@ -32,6 +32,8 @@ import asgn2RollingStock.RollingStock;
 public class DepartingTrain extends Object {
 	
 	List<RollingStock> stockList = new ArrayList<RollingStock>(); // Create a list that contains all rolling stock
+	private final int EMPTY = 0, FIRST = 0;
+	
 	
 
 	/* 
@@ -53,10 +55,10 @@ public class DepartingTrain extends Object {
 	 */
 	public RollingStock firstCarriage() {
         
-		// Check if we have any carriages 
-		if(stockList.size() > 0) {
-			return stockList.get(0); // this MUST be a locomotive
-		} else {
+		
+		if(stockList.size() > EMPTY) { // we have at least one carriage
+			return stockList.get(FIRST); // get the first this MUST be a locomotive
+		} else { // no carriages
 			System.out.println("No carriages on this train!");
 			return null;
 		}
@@ -133,6 +135,11 @@ public class DepartingTrain extends Object {
 	 */
 	public void addCarriage(RollingStock newCarriage) throws TrainException	{
 		
+		
+		System.out.println(newCarriage.toString());
+		
+		// Check if first carriage is a locomotive. If not throw exception
+		//if(stockList.get(FIRST) instanceof )
 	}
 	
 	

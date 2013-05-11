@@ -22,6 +22,12 @@ public class TrainTests {
 	 * firstCarriage() - Must be a locomotive
 	 */
 	
+    private Integer defaultWeight = 50;
+    private Integer invalidWeight = -100;
+    private String defaultGoods = "G";
+    private String invalidGoods = "K";
+    private String defaultClassification = "4S";
+    
 	@Test
 	 public void testFirstCarriageReturnsNullWhenNoCarriages() throws TrainException {
 		DepartingTrain myTrain = new DepartingTrain();
@@ -29,4 +35,16 @@ public class TrainTests {
 		assertEquals(null, myTrain.firstCarriage());
 	}
 	
+	
+	@Test
+	public void testFirstCarriageReturnsFirstCarriage() throws TrainException {
+		
+		DepartingTrain myTrain = new DepartingTrain();
+    	FreightCar freight1 = new FreightCar(defaultWeight, defaultGoods);
+
+    	System.out.println(freight1.goodsType());
+    	
+		myTrain.addCarriage(freight1);
+		
+	}
 }

@@ -56,6 +56,6 @@ public class FreightCar extends RollingStock {
      * @returns a human-readable description of the freight car
      */
     public String toString() {
-        return null;      
+    	return "Freight("+goodsType()+")";
     }
 }

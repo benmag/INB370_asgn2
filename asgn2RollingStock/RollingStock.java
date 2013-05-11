@@ -29,4 +29,6 @@ public abstract class RollingStock {
 		return grossWeight;
     }
 
+    public abstract String toString();
+
 }
