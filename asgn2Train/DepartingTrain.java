@@ -15,6 +15,7 @@
  * <ol>
  * <li>The train is assembled from individual carriages. New carriages may be added to the rear of the train only. (Similarly, carriages may be removed from the rear of the train only.)</li>
  * <li>Passengers board the train. For safety reasons, no carriage shunting operations may be performed when any passengers are on board the train.</li>
+ * </ol>
  * 
  * @version 1.0
  * @author Ben Maggacis, Corey Thompson
@@ -22,17 +23,25 @@
  */
 package asgn2Train;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import asgn2Exceptions.TrainException;
 import asgn2RollingStock.RollingStock;
 
-public class DepartingTrain {
+public class DepartingTrain extends Object {
 	
+	List<RollingStock> stockList = new ArrayList<RollingStock>(); // Create a list that contains all rolling stock
+	
+
 	/* 
 	 * Constructs a (potential) train object containing no carriages (yet).
 	 */
 	public DepartingTrain() {
-		
-		
+	
+		// Not really sure what to do in here yet.
+		//NEW TRAIN OBJECT: DepartingTrain myTrain = new DepartingTrain();
+	
 	}
 	
 	
@@ -43,7 +52,14 @@ public class DepartingTrain {
 	 * @returns the first carriage in the train, or null if there are no carriages
 	 */
 	public RollingStock firstCarriage() {
-            return null;
+        
+		// Check if we have any carriages 
+		if(stockList.size() > 0) {
+			return stockList.get(0); // this MUST be a locomotive
+		} else {
+			System.out.println("No carriages on this train!");
+			return null;
+		}
 		
 	}
 	
@@ -117,7 +133,6 @@ public class DepartingTrain {
 	 */
 	public void addCarriage(RollingStock newCarriage) throws TrainException	{
 		
-		
 	}
 	
 	
@@ -140,7 +155,7 @@ public class DepartingTrain {
 	 * @override toString in class Object
 	 * @returns a human-readable description of the entire train
 	 */
-	public String toString() {
+	public String toString() { 
 		return null;
 	}
 
