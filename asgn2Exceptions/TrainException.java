@@ -15,7 +15,7 @@ public class TrainException extends Exception {
      * @param message - an informative message describing the cause of the problem
      */
     public TrainException(String message) {
-		// TODO Auto-generated constructor stub
+    	super("Train Exception: " + message);
+    	System.out.println("Train Exception: "+message); // REMOVE ME. ONLY HERE FOR TESTING PURPOSES
     }
-
 }

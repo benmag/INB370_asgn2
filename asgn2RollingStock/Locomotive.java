@@ -50,6 +50,6 @@ public class Locomotive extends RollingStock {
 	 */
 	@Override
 	public String toString() {
-		return "Loco("+  this.classification + ")";
+		return "Loco("+this.classification+")";
 	}
 }
