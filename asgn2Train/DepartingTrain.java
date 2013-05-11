@@ -136,10 +136,30 @@ public class DepartingTrain extends Object {
 	public void addCarriage(RollingStock newCarriage) throws TrainException	{
 		
 		
-		System.out.println(newCarriage.toString());
+		// Do we already have carriages?
+		if(stockList.size() > EMPTY) {
+			
+			// Check if it's allowed to be added
+			if(newCarriage.toString().contains("Loco") && stockList.get(FIRST).toString().contains("Loco")) {
+				// We've already got one locomotive, another cannot be added.
+				throw new TrainException("Invalid train configuration. Cannot addCarriage(). Only one locomotive per train. ");
+			} else {
+				stockList.add(newCarriage); //valid addCarriage
+			}
+			
+			// NOTE: Also need to check if people are on board. Cannot add if people are on board
+			
+		} else {
+			
+			// We only want to accept locomotive carriages for our first carriage
+			if(newCarriage.toString().contains("Loco")) {
+				stockList.add(newCarriage);
+			} else {
+				throw new TrainException("Invalid train configuration. First carriage must be a locomotive. Cannot add new carriage in addCarriage");
+			}
+			
+		}
 		
-		// Check if first carriage is a locomotive. If not throw exception
-		//if(stockList.get(FIRST) instanceof )
 	}
 	
 	
