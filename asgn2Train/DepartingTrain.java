@@ -26,6 +26,8 @@ package asgn2Train;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.runner.notification.StoppedByUserException;
+
 import asgn2Exceptions.TrainException;
 import asgn2RollingStock.RollingStock;
 
@@ -33,8 +35,9 @@ public class DepartingTrain extends Object {
 	
 	List<RollingStock> stockList = new ArrayList<RollingStock>(); // Create a list that contains all rolling stock
 	private final int EMPTY = 0, FIRST = 0;
-	
-	
+	private int currentCarriagePos = 0;
+	private int precedingCarriageCall = 0; // track if firstCarriage or nextCarriage has been called
+	private boolean freightCarriageAdded = false; // track if we have any passenger carriages 
 
 	/* 
 	 * Constructs a (potential) train object containing no carriages (yet).
@@ -54,9 +57,9 @@ public class DepartingTrain extends Object {
 	 * @returns the first carriage in the train, or null if there are no carriages
 	 */
 	public RollingStock firstCarriage() {
-        
 		
 		if(stockList.size() > EMPTY) { // we have at least one carriage
+			this.precedingCarriageCall++; // track preceding carriage call
 			return stockList.get(FIRST); // get the first this MUST be a locomotive
 		} else { // no carriages
 			System.out.println("No carriages on this train!");
@@ -74,8 +77,19 @@ public class DepartingTrain extends Object {
 	 */
 	
 	public RollingStock nextCarriage() {
-            return null;
 		
+		if(currentCarriagePos < stockList.size()) {
+			
+			if(precedingCarriageCall == 0) {
+				return firstCarriage();
+			} else {
+				this.currentCarriagePos++;
+				return stockList.get(currentCarriagePos);	
+			}
+		} else {
+			return null;
+		}
+			
 	}
 	
 	
@@ -86,7 +100,6 @@ public class DepartingTrain extends Object {
 	 */
 	public Integer numberOnBoard() {
             return null;
-		
 	}
 	
 	
@@ -143,8 +156,15 @@ public class DepartingTrain extends Object {
 			if(newCarriage.toString().contains("Loco") && stockList.get(FIRST).toString().contains("Loco")) {
 				// We've already got one locomotive, another cannot be added.
 				throw new TrainException("Invalid train configuration. Cannot addCarriage(). Only one locomotive per train. ");
+			} else if(freightCarriageAdded == true && newCarriage.toString().contains("Passenger")) {
+				// Can't have people carriages here. Health and Safety regulations are such a drag.
+				throw new TrainException("Invalid train configuration. Cannot addCarriage() for passengers to train after freight carriages have been added."); 
 			} else {
-				stockList.add(newCarriage); //valid addCarriage
+				
+				// Track if freight carriage added to train
+				if(newCarriage.toString().contains("Freight")) this.freightCarriageAdded = true;
+				
+				stockList.add(newCarriage);
 			}
 			
 			// NOTE: Also need to check if people are on board. Cannot add if people are on board
