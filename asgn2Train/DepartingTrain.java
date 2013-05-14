@@ -28,6 +28,7 @@ import java.util.List;
 
 
 import asgn2Exceptions.TrainException;
+import asgn2RollingStock.Locomotive;
 import asgn2RollingStock.RollingStock;
 import asgn2RollingStock.PassengerCar;
 
@@ -181,9 +182,22 @@ public class DepartingTrain extends Object {
 	 */
 	public boolean trainCanMove() {
 		
-		// GET THIS MOFOS PULLING POWER
-		//stockList.get(LOCOPOS)
-            return false;
+		Integer trainPower = ((Locomotive) stockList.get(LOCOPOS)).power();
+		Integer trainWeight = 0;
+		
+		// Loop through and generate the total weight of the train
+		 for (int carPos = 0; carPos < stockList.size(); carPos++) {
+		      
+			 trainWeight += stockList.get(carPos).getGrossWeight();
+			 
+		 }
+		 
+		 // Can it be pulled by the train?
+		 if(trainPower >= trainWeight) {
+			 return true;
+		 } else {
+			 return false;
+		 }
 	}
 	
 	

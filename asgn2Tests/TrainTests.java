@@ -23,6 +23,7 @@ public class TrainTests {
 	 */
 	private Integer everyoneFoundASeat = 0; 
 	private Integer defaultWeight = 50;
+	private Integer defaultTooHeavyWeight = 500000;
 	private Integer defaultSeats = 50;
 	private Integer defaultPassengers = 42;
     private Integer invalidWeight = -100;
@@ -336,6 +337,50 @@ public class TrainTests {
 		
 		assertEquals(numberOfPeopleSeatless, myTrain.board(defaultPassengers + defaultPassengers + defaultPassengers));
 		
+	}
+	
+	
+	/*
+	 * Test to see if the train can move the weight
+	 * 
+	 * @result true if the train can move. false if it cannot 
+	 */
+	@Test
+	public void testTrainCanMove() throws TrainException {
+		
+		DepartingTrain myTrain = new DepartingTrain();
+		Locomotive loco = new Locomotive(defaultWeight, defaultClassification);
+				
+		PassengerCar pass1 = new PassengerCar(defaultWeight, defaultSeats);
+		FreightCar freight1 = new FreightCar(defaultWeight, defaultGoods);		
+		
+		myTrain.addCarriage(loco);
+		myTrain.addCarriage(pass1);
+		myTrain.addCarriage(freight1);
+		
+		assertTrue(myTrain.trainCanMove());
+	}
+	
+
+	/*
+	 * Test to see if the code recongizes that the train can't move due to the weight
+	 * 
+	 * @result false 
+	 */
+	@Test
+	public void testTrainCantMove() throws TrainException {
+		
+		DepartingTrain myTrain = new DepartingTrain();
+		Locomotive loco = new Locomotive(defaultWeight, defaultClassification);
+				
+		PassengerCar pass1 = new PassengerCar(defaultTooHeavyWeight, defaultSeats);
+		FreightCar freight1 = new FreightCar(defaultWeight, defaultGoods);		
+		
+		myTrain.addCarriage(loco);
+		myTrain.addCarriage(pass1);
+		myTrain.addCarriage(freight1);
+		
+		assertFalse(myTrain.trainCanMove());
 	}
 	
 }
