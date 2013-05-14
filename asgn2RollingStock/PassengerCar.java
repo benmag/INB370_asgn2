@@ -20,6 +20,15 @@ public class PassengerCar extends RollingStock{
 	 */
 	public PassengerCar(Integer grossWeight, Integer numberOfSeats) throws TrainException {
 		super(grossWeight);
+		
+		// Valid number of seats provided 
+		if(numberOfSeats > 0) {
+			this.numOfSeats = numberOfSeats; // record no. of seats
+		} else {
+			// Can't seat count less than 0. 
+			throw new TrainException("Invalid number of seats. Must be positive. Cannot construct PassengerCar()");
+		}
+		
 	}
 	
 	public void alight(Integer departingPassengers) throws TrainException {

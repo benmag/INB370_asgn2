@@ -64,11 +64,11 @@ public class RollingStockTest {
     
     @Test
     public void testPassengerCar() throws TrainException {
-    	Locomotive locomotive1 = new Locomotive(defaultWeight, defaultClassification);
+    	//Locomotive locomotive1 = new Locomotive(defaultWeight, defaultClassification);
     	PassengerCar pass1 = new PassengerCar(defaultWeight, defaultSeats);
     	pass1.board(defaultPassengers);
     	
     	
     	assertEquals(defaultPassengers, pass1.numberOnBoard());
-    }
+    } 
 }
