@@ -15,8 +15,10 @@ import static org.junit.Assert.*;
  * @author Spike
  */
 public class RollingStockTest {
-    private Integer defaultWeight = 50;
-    private Integer invalidWeight = -100;
+	private Integer defaultWeight = 50;
+	private Integer defaultSeats = 50;
+	private Integer defaultPassengers = 30;
+	private Integer invalidWeight = -100;
     private String defaultGoods = "G";
     private String invalidGoods = "K";
     private String defaultClassification = "4S";
@@ -57,5 +59,16 @@ public class RollingStockTest {
     public void testLocomotiveWeight() throws TrainException {
     	Locomotive locomotive1 = new Locomotive(defaultWeight, defaultClassification);
     	assertEquals(locomotive1.getGrossWeight(), defaultWeight);
+    }
+    
+    
+    @Test
+    public void testPassengerCar() throws TrainException {
+    	Locomotive locomotive1 = new Locomotive(defaultWeight, defaultClassification);
+    	PassengerCar pass1 = new PassengerCar(defaultWeight, defaultSeats);
+    	pass1.board(defaultPassengers);
+    	
+    	
+    	assertEquals(defaultPassengers, pass1.numberOnBoard());
     }
 }
