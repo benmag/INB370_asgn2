@@ -24,6 +24,7 @@ public class TrainTests {
 	
 	private Integer defaultWeight = 50;
 	private Integer defaultSeats = 50;
+	private Integer defaultPassengers = 42;
     private Integer invalidWeight = -100;
     private String defaultGoods = "G";
     private String invalidGoods = "K";
@@ -190,6 +191,41 @@ public class TrainTests {
 		assertEquals(loco1, myTrain.nextCarriage());
 		assertEquals(freight1, myTrain.nextCarriage());
 		assertEquals(freight1, myTrain.nextCarriage());
+		
+	}
+	
+	
+	
+	/*
+	 * Test to see that the numberOfPassengers returns the correct value
+	 * 
+	 * @result correct number of passengers on board is returned 
+	 */
+	@Test
+	public void testNumberOfPassengersOnboard() throws TrainException {
+		
+		DepartingTrain myTrain = new DepartingTrain();
+		Locomotive loco = new Locomotive(defaultWeight, defaultClassification);
+				
+		PassengerCar pass1 = new PassengerCar(defaultWeight, defaultSeats);
+		pass1.board(defaultPassengers);
+		
+		PassengerCar pass2 = new PassengerCar(defaultWeight, defaultSeats);
+		pass2.board(defaultPassengers);
+
+		PassengerCar pass3 = new PassengerCar(defaultWeight, defaultSeats);
+		pass3.board(defaultPassengers);
+
+		
+		myTrain.addCarriage(loco);
+		myTrain.addCarriage(pass1);
+		myTrain.addCarriage(pass2);
+		myTrain.addCarriage(pass3);
+		
+		Integer expectedPass = defaultPassengers + defaultPassengers + defaultPassengers;
+		
+		assertEquals(expectedPass, myTrain.numberOnBoard());
+		
 		
 	}
 	

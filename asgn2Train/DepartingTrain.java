@@ -30,6 +30,7 @@ import org.junit.runner.notification.StoppedByUserException;
 
 import asgn2Exceptions.TrainException;
 import asgn2RollingStock.RollingStock;
+import asgn2RollingStock.PassengerCar;
 
 public class DepartingTrain extends Object {
 	
@@ -99,7 +100,23 @@ public class DepartingTrain extends Object {
 	 * @returns the number of passengers on the train
 	 */
 	public Integer numberOnBoard() {
-            return null;
+            //return null;
+            Integer passengerCount = 0;
+            
+            // Loop through, identify the passenger cars and count the number of passengers
+            for (int cartPos = 0; cartPos < stockList.size(); cartPos++) {
+				if(stockList.get(cartPos).toString().contains("Passenger")) {
+					System.out.println("SSD");
+					
+					Integer foo = ((PassengerCar) stockList.get(cartPos)).numberOnBoard();
+					System.out.println(foo);
+					passengerCount = passengerCount + foo;
+					
+					//System.out.println(((PassengerCar) stockList.get(cartPos)).numberOnBoard());
+				}
+			}
+            
+            return passengerCount;
 	}
 	
 	
