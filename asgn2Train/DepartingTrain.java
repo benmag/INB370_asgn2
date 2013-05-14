@@ -26,7 +26,6 @@ package asgn2Train;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.runner.notification.StoppedByUserException;
 
 import asgn2Exceptions.TrainException;
 import asgn2RollingStock.RollingStock;
@@ -35,7 +34,7 @@ import asgn2RollingStock.PassengerCar;
 public class DepartingTrain extends Object {
 	
 	List<RollingStock> stockList = new ArrayList<RollingStock>(); // Create a list that contains all rolling stock
-	private final int EMPTY = 0, FIRST = 0;
+	private final int EMPTY = 0, FIRST = 0, LOCOPOS = 0;
 	private int currentCarriagePos = 0;
 	private int precedingCarriageCall = 0; // track if firstCarriage or nextCarriage has been called
 	private boolean freightCarriageAdded = false; // track if we have any passenger carriages 
@@ -100,19 +99,16 @@ public class DepartingTrain extends Object {
 	 * @returns the number of passengers on the train
 	 */
 	public Integer numberOnBoard() {
-            //return null;
+  
             Integer passengerCount = 0;
             
             // Loop through, identify the passenger cars and count the number of passengers
-            for (int cartPos = 0; cartPos < stockList.size(); cartPos++) {
-				if(stockList.get(cartPos).toString().contains("Passenger")) {
-					System.out.println("SSD");
+            for (int carPos = 0; carPos < stockList.size(); carPos++) {
+				if(stockList.get(carPos).toString().contains("Passenger")) { // if the car is a
 					
-					Integer foo = ((PassengerCar) stockList.get(cartPos)).numberOnBoard();
-					System.out.println(foo);
-					passengerCount = passengerCount + foo;
+					// Count the number of passengers
+					passengerCount = passengerCount + ((PassengerCar) stockList.get(carPos)).numberOnBoard();
 					
-					//System.out.println(((PassengerCar) stockList.get(cartPos)).numberOnBoard());
 				}
 			}
             
@@ -126,7 +122,20 @@ public class DepartingTrain extends Object {
 	 * @returns the number of seats on the train
 	 */
 	public Integer numberOfSeats() {
-            return null;
+            
+        Integer seatCount = 0;
+        
+        // Loop through, identify the passenger cars and count the number of passengers
+        for (int carPos = 0; carPos < stockList.size(); carPos++) {
+			if(stockList.get(carPos).toString().contains("Passenger")) { // if the car is a
+				
+				// Count the number of passengers
+				seatCount = seatCount + ((PassengerCar) stockList.get(carPos)).numberOfSeats();
+				
+			}
+		}
+        
+        return seatCount;
 		
 	}
 	
@@ -138,9 +147,29 @@ public class DepartingTrain extends Object {
 	 * @throws - TrainException - if the number of new passengers is negative
 	 */
 	public Integer board(Integer newPassengers) throws TrainException {
-            return null;
 		
+		Integer dontFit = newPassengers;
 		
+		// Loop through, find all passenger carriages 
+        for (int carPos = 0; carPos < stockList.size(); carPos++) {
+        	
+        	// Add as many passengers into each passenger carriage 
+			if(stockList.get(carPos).toString().contains("Passenger")) { // if the car is a
+				
+								
+				// How many can we fit in 
+				Integer availableInCar = ((PassengerCar) stockList.get(carPos)).numberOfSeats() -((PassengerCar) stockList.get(carPos)).numberOnBoard();
+				
+				// Board the maximum amount of people into this car
+				((PassengerCar) stockList.get(carPos)).board(availableInCar);
+				
+				// Update count of people who don't fit. Negatives means we have left over seats!
+				dontFit -= availableInCar;
+				
+			}
+		}
+        
+        return dontFit;	
 	}
 	
 	/*
@@ -151,6 +180,9 @@ public class DepartingTrain extends Object {
 	 * @returns true if the train can move (or contains no carriages), false otherwise
 	 */
 	public boolean trainCanMove() {
+		
+		// GET THIS MOFOS PULLING POWER
+		//stockList.get(LOCOPOS)
             return false;
 	}
 	

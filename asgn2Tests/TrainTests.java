@@ -21,7 +21,7 @@ public class TrainTests {
 	 * firstCarriage() - Returns null if there are no carriages
 	 * firstCarriage() - Must be a locomotive
 	 */
-	
+	private Integer everyoneFoundASeat = 0; 
 	private Integer defaultWeight = 50;
 	private Integer defaultSeats = 50;
 	private Integer defaultPassengers = 42;
@@ -226,6 +226,115 @@ public class TrainTests {
 		
 		assertEquals(expectedPass, myTrain.numberOnBoard());
 		
+	}
+	
+	
+	/*
+	 * Test to see that the numberOfSeats returns the correct value
+	 * 
+	 * @result correct number of seats on board is returned 
+	 */
+	@Test
+	public void testNumberOfSeatsOnboard() throws TrainException {
+		
+		DepartingTrain myTrain = new DepartingTrain();
+		Locomotive loco = new Locomotive(defaultWeight, defaultClassification);
+				
+		PassengerCar pass1 = new PassengerCar(defaultWeight, defaultSeats);
+		
+		PassengerCar pass2 = new PassengerCar(defaultWeight, defaultSeats);
+		
+		PassengerCar pass3 = new PassengerCar(defaultWeight, defaultSeats);
+		
+		
+		myTrain.addCarriage(loco);
+		myTrain.addCarriage(pass1);
+		myTrain.addCarriage(pass2);
+		myTrain.addCarriage(pass3);
+		
+		Integer expectedSeats = defaultSeats + defaultSeats + defaultSeats;
+		
+		assertEquals(expectedSeats, myTrain.numberOfSeats());
+		
+		
+	}
+	
+	
+	
+	
+	/*
+	 * Test to see that the board() method works. This method takes the total number of passengers wanting to board and progressively adds 
+	 * them into any available seats.  
+	 * 
+	 * @result people board the train
+	 */
+	@Test
+	public void testBoard() throws TrainException {
+		
+		DepartingTrain myTrain = new DepartingTrain();
+		Locomotive loco = new Locomotive(defaultWeight, defaultClassification);
+				
+		PassengerCar pass1 = new PassengerCar(defaultWeight, defaultSeats);
+		
+		myTrain.addCarriage(loco);
+		myTrain.addCarriage(pass1);
+		
+		assertEquals(everyoneFoundASeat, myTrain.board(defaultSeats));
+		
+	}
+	
+	
+	
+	/*
+	 * Test to see that the board() method works. Should return the number of people that couldn't board
+	 * 
+	 * @result positive integer 
+	 */
+	@Test
+	public void testTooManyBoard() throws TrainException {
+		
+		DepartingTrain myTrain = new DepartingTrain();
+		Locomotive loco = new Locomotive(defaultWeight, defaultClassification);
+				
+		PassengerCar pass1 = new PassengerCar(defaultWeight, defaultSeats);
+		
+		myTrain.addCarriage(loco);
+		myTrain.addCarriage(pass1);
+		
+		// (total of passengers) - number of the seats = number of people without a seat
+		Integer numberOfPeopleSeatless = (defaultPassengers + defaultPassengers) - defaultSeats;
+		
+		assertEquals(numberOfPeopleSeatless, myTrain.board(defaultPassengers+defaultPassengers));
+		
+	}
+	
+	
+	/*
+	 * Test to see that the board() handles overflow. If there's too many people for one carriage, take them
+	 * to the next carriage and the next one (if they exist) until everyone is on board.
+	 * 
+	 * @result positive integer 
+	 */
+	@Test
+	public void testTooManyBoardMultipleCarriages() throws TrainException {
+		
+		DepartingTrain myTrain = new DepartingTrain();
+		Locomotive loco = new Locomotive(defaultWeight, defaultClassification);
+				
+		PassengerCar pass1 = new PassengerCar(defaultWeight, defaultSeats);
+		PassengerCar pass2 = new PassengerCar(defaultWeight, defaultSeats);
+		PassengerCar pass3 = new PassengerCar(defaultWeight, defaultSeats);
+		
+		
+		myTrain.addCarriage(loco);
+		myTrain.addCarriage(pass1);
+		myTrain.addCarriage(pass2);
+		myTrain.addCarriage(pass3);
+		
+		// (total of passengers) - ( total number of seats) = number of seats left over 
+		Integer numberOfPeopleSeatless = (defaultPassengers + defaultPassengers + defaultPassengers) - (defaultSeats + defaultSeats + defaultSeats);
+		
+		assertEquals(numberOfPeopleSeatless, myTrain.board(defaultPassengers + defaultPassengers + defaultPassengers));
 		
 	}
 	
