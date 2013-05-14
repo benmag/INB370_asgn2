@@ -22,7 +22,8 @@ public class TrainTests {
 	 * firstCarriage() - Must be a locomotive
 	 */
 	
-    private Integer defaultWeight = 50;
+	private Integer defaultWeight = 50;
+	private Integer defaultSeats = 50;
     private Integer invalidWeight = -100;
     private String defaultGoods = "G";
     private String invalidGoods = "K";
@@ -42,7 +43,7 @@ public class TrainTests {
 	
 	
 	/*
-	 * Test to see if addCarriage() works with valid carriage 
+	 * Test to see if addCarriage() works with valid first carriage (locomotive)
 	 * 
 	 * @result Carriage added, no exceptions thrown
 	 */
@@ -53,6 +54,63 @@ public class TrainTests {
     	Locomotive loco1 = new Locomotive(defaultWeight, defaultClassification);
     	
 		myTrain.addCarriage(loco1);
+		
+	}
+	
+	
+	/*
+	 * Test to see if addCarriage() catches error when invalid first carriage added (not locomotive) 
+	 * 
+	 * @throws TrainException
+	 * @result expected exception - first carriage must be a locomotive
+	 */
+	@Test (expected = TrainException.class)
+	public void testAddFirstCarriageInvalid() throws TrainException {
+		
+		DepartingTrain myTrain = new DepartingTrain();
+    	FreightCar freight1 = new FreightCar(defaultWeight, defaultGoods);
+    	
+		myTrain.addCarriage(freight1);
+		
+	}
+	
+	/*
+	 * Test to see if addCarriage() handles attempts to add two locomotive carriages 
+	 * 
+	 * @throws TrainException when two locomotives are attached to one train
+	 * @result An expected exception
+	 */	
+	@Test (expected = TrainException.class)
+	public void testAddCarriageTwoLocomotives() throws TrainException {
+		
+		DepartingTrain myTrain = new DepartingTrain();
+		Locomotive loco1 = new Locomotive(defaultWeight, defaultClassification);
+		Locomotive loco2 = new Locomotive(defaultWeight, defaultClassification);
+
+		myTrain.addCarriage(loco1);
+		myTrain.addCarriage(loco2);
+		
+	}
+	
+	
+	
+	/*
+	 * Test to see if addCarriage() handles attempts to add passengers AFTER Freight (invalid config)
+	 * 
+	 * @throws TrainException - invalid order. 1st locomotive, 2nd. passengers, 3rd. freight.
+	 * @result An expected exception
+	 */	
+	@Test (expected = TrainException.class)
+	public void testAddCarriageWrongOrder() throws TrainException {
+		
+		DepartingTrain myTrain = new DepartingTrain();
+		Locomotive loco1 = new Locomotive(defaultWeight, defaultClassification);
+		FreightCar freight1 = new FreightCar(defaultWeight, defaultGoods);
+		PassengerCar pass1 = new PassengerCar(defaultWeight, defaultSeats);
+
+		myTrain.addCarriage(loco1);
+		myTrain.addCarriage(freight1);
+		myTrain.addCarriage(pass1);
 		
 	}
 	
@@ -109,6 +167,29 @@ public class TrainTests {
 		
 		assertEquals(loco1, myTrain.firstCarriage());
 		
+		
+	}
+	
+	
+	/*
+	 * Test to see if nextCarriage works as expected 
+	 * 
+	 * @result Carriages are returned in correct order
+	 */
+	@Test
+	public void testNextCarriageWorks() throws TrainException {
+		
+		DepartingTrain myTrain = new DepartingTrain();
+    	Locomotive loco1 = new Locomotive(defaultWeight, defaultClassification);
+    	FreightCar freight1 = new FreightCar(defaultWeight, defaultGoods);
+    	
+		myTrain.addCarriage(loco1);
+		myTrain.addCarriage(freight1);
+		myTrain.addCarriage(freight1);
+
+		assertEquals(loco1, myTrain.nextCarriage());
+		assertEquals(freight1, myTrain.nextCarriage());
+		assertEquals(freight1, myTrain.nextCarriage());
 		
 	}
 	
