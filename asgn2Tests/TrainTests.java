@@ -383,4 +383,27 @@ public class TrainTests {
 		assertFalse(myTrain.trainCanMove());
 	}
 	
+	
+	
+	/*
+	 * Test to see if the code recongizes that the train can't move due to the weight
+	 * 
+	 * @result false 
+	 */
+	@Test
+	public void trainToString() throws TrainException {
+		
+		DepartingTrain myTrain = new DepartingTrain();
+		Locomotive loco = new Locomotive(defaultWeight, defaultClassification);
+				
+		PassengerCar pass1 = new PassengerCar(defaultTooHeavyWeight, defaultSeats);
+		FreightCar freight1 = new FreightCar(defaultWeight, defaultGoods);		
+		
+		myTrain.addCarriage(loco);
+		myTrain.addCarriage(pass1);
+		myTrain.addCarriage(freight1);
+		
+		myTrain.toString();
+	}
+	
 }

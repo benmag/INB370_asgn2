@@ -253,7 +253,15 @@ public class DepartingTrain extends Object {
 	 */
 	public void removeCarriage() throws TrainException {
 		
-		
+		// FIX ME: Make me more pretty :) Need to check if there's carriages, throw exceptions etc.
+		// Check if there are people on board
+		if(numberOnBoard() > EMPTY) {
+			throw new TrainException("Shunting operation, removeCarriage() could not be performed, there are people on board!");
+		} else if(stockList.size() == EMPTY) {
+			throw new TrainException("Cannot removeCarriage(). No rolling stock on the train.");
+		} else {
+			stockList.remove(stockList.size());	
+		}
 		
 	}
 	
@@ -266,6 +274,57 @@ public class DepartingTrain extends Object {
 	 * @returns a human-readable description of the entire train
 	 */
 	public String toString() { 
+		
+		String line1 = "";
+		String line2 = "";
+		String line3 = "";
+		
+		/*System.out.println(
+				"_||__  ____ ____ ____     \n" +
+				"(o)___)}___}}___}}___}   \n " +
+				"'U'0 0  0 0  0 0  0 0    \n");*/
+				
+		// Loop through and append carriage info to train 
+		 for (int carPos = 0; carPos < stockList.size(); carPos++) {
+		      
+			 
+			 // Build carriage
+			 if(stockList.get(carPos).toString().contains("Loco")) {
+
+				 line1 = line1 + "_||_____________";
+				 line2 = line2 + "(o)__"+stockList.get(carPos).toString()+"__)";
+				 line3 = line3 + "'U' 0 0    0 0 ";
+				
+			 } else if(stockList.get(carPos).toString().contains("Passenger")) {
+			
+				 line1 = line1 + "  _____________________";
+				 line2 = line2 + "}___"+stockList.get(carPos).toString()+"___}";
+				 line3 = line3 + "      00    00    00    ";
+				 
+			 } else if(stockList.get(carPos).toString().contains("Freight")) {
+			
+				 line1 = line1 + "  ___________________";
+				 line2 = line2 + "}____"+stockList.get(carPos).toString()+"_____}";
+				 line3 = line3 + "      00    00    00    ";
+				 
+			 }
+			 
+			 /*   \/         \/
+			  * |~~~~ TRAIN ~~~~|
+			  * |     Loco(x)   |
+			  * |=> 400 tonnes  |
+			  * |---------------|
+			  * | Passenger(x/y)|
+			  * |---------------|
+			  * |   Freight(x)  |
+			  */
+			 
+		 }
+		 
+		 System.out.println(line1);
+		 System.out.println(line2);
+		 System.out.println(line3);
+		 System.out.println();
 		return null;
 	}
 
