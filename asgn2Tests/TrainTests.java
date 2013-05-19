@@ -10,6 +10,7 @@ import asgn2Exceptions.TrainException;
 import asgn2RollingStock.*;
 import asgn2Train.DepartingTrain;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -333,9 +334,9 @@ public class TrainTests {
 		myTrain.addCarriage(pass3);
 		
 		// (total of passengers) - ( total number of seats) = number of seats left over 
-		Integer numberOfPeopleSeatless = (defaultPassengers + defaultPassengers + defaultPassengers) - (defaultSeats + defaultSeats + defaultSeats);
-		
-		assertEquals(numberOfPeopleSeatless, myTrain.board(defaultPassengers + defaultPassengers + defaultPassengers));
+		Integer numberOfPeopleSeatless = (defaultPassengers + defaultPassengers + defaultPassengers + defaultPassengers) - (defaultSeats + defaultSeats + defaultSeats);
+
+		assertEquals(numberOfPeopleSeatless, myTrain.board(defaultPassengers + defaultPassengers + defaultPassengers + defaultPassengers));
 		
 	}
 	
@@ -398,10 +399,17 @@ public class TrainTests {
 				
 		PassengerCar pass1 = new PassengerCar(defaultTooHeavyWeight, defaultSeats);
 		FreightCar freight1 = new FreightCar(defaultWeight, defaultGoods);		
+		FreightCar freight2 = new FreightCar(defaultWeight, defaultGoods);		
+		FreightCar freight3 = new FreightCar(defaultWeight, defaultGoods);		
+		FreightCar freight4 = new FreightCar(defaultWeight, defaultGoods);		
+
 		
 		myTrain.addCarriage(loco);
 		myTrain.addCarriage(pass1);
 		myTrain.addCarriage(freight1);
+		myTrain.addCarriage(freight2);
+		myTrain.addCarriage(freight3);
+		myTrain.addCarriage(freight4);
 		
 		myTrain.toString();
 	}

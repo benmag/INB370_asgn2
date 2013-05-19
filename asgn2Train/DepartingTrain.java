@@ -150,15 +150,19 @@ public class DepartingTrain extends Object {
 	public Integer board(Integer newPassengers) throws TrainException {
 		
 		Integer dontFit = newPassengers;
-		
+		Integer passengersWaiting = newPassengers;
 		// Loop through, find all passenger carriages 
         for (int carPos = 0; carPos < stockList.size(); carPos++) {
         	
         	// Add as many passengers into each passenger carriage 
 			if(stockList.get(carPos).toString().contains("Passenger")) { // if the car is a
 				
-								
-				// How many can we fit in 
+				// Board the new passengers and any other passengers that didn't fit into the carriage before.
+				dontFit = ((PassengerCar) stockList.get(carPos)).board(dontFit);
+				
+				
+				/* -- REMOVED. I'm silly. :)
+				//How many can we fit in 
 				Integer availableInCar = ((PassengerCar) stockList.get(carPos)).numberOfSeats() -((PassengerCar) stockList.get(carPos)).numberOnBoard();
 				
 				// Board the maximum amount of people into this car
@@ -166,6 +170,7 @@ public class DepartingTrain extends Object {
 				
 				// Update count of people who don't fit. Negatives means we have left over seats!
 				dontFit -= availableInCar;
+				*/
 				
 			}
 		}
@@ -222,6 +227,8 @@ public class DepartingTrain extends Object {
 			} else if(freightCarriageAdded == true && newCarriage.toString().contains("Passenger")) {
 				// Can't have people carriages here. Health and Safety regulations are such a drag.
 				throw new TrainException("Invalid train configuration. Cannot addCarriage() for passengers to train after freight carriages have been added."); 
+			} else if(newCarriage.toString().contains("Freight") && numberOnBoard() > EMPTY) {
+				throw new TrainException("Invalid train configuration. You cannot addCarriage() if people are on board");
 			} else {
 				
 				// Track if freight carriage added to train
@@ -299,13 +306,13 @@ public class DepartingTrain extends Object {
 			
 				 line1 = line1 + "  _____________________";
 				 line2 = line2 + "}___"+stockList.get(carPos).toString()+"___}";
-				 line3 = line3 + "      00    00    00    ";
+				 line3 = line3 + "      00    00    00   ";
 				 
 			 } else if(stockList.get(carPos).toString().contains("Freight")) {
 			
 				 line1 = line1 + "  ___________________";
 				 line2 = line2 + "}____"+stockList.get(carPos).toString()+"_____}";
-				 line3 = line3 + "      00    00    00    ";
+				 line3 = line3 + "     00    00    00  ";
 				 
 			 }
 			 
