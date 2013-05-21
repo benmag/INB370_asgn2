@@ -27,9 +27,11 @@ public class TrainTests {
 	private Integer defaultTooHeavyWeight = 500000;
 	private Integer defaultSeats = 50;
 	private Integer defaultPassengers = 42;
-    private Integer invalidWeight = -100;
+    @SuppressWarnings("unused")
+	private Integer invalidWeight = -100;
     private String defaultGoods = "G";
-    private String invalidGoods = "K";
+    @SuppressWarnings("unused")
+	private String invalidGoods = "K";
     private String defaultClassification = "4S";
     
     /*
@@ -40,7 +42,6 @@ public class TrainTests {
 	@Test
 	 public void testFirstCarriageReturnsNullWhenNoCarriages() throws TrainException {
 		DepartingTrain myTrain = new DepartingTrain();
-		
 		assertEquals(null, myTrain.firstCarriage());
 	}
 	
@@ -364,7 +365,7 @@ public class TrainTests {
 	
 
 	/*
-	 * Test to see if the code recongizes that the train can't move due to the weight
+	 * Test to see if the code recognizes that the train can't move due to the weight
 	 * 
 	 * @result false 
 	 */

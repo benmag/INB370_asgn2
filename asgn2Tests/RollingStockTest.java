@@ -23,31 +23,56 @@ public class RollingStockTest {
     private String invalidGoods = "K";
     private String defaultClassification = "4S";
     
-    
+    /**
+     * Test the goods type is set correctly.
+     * This test passes.
+     * @throws TrainException
+     */
     @Test
     public void testFreightCarType() throws TrainException {
     	FreightCar freight1 = new FreightCar(defaultWeight, defaultGoods);
         assertEquals(freight1.goodsType(), defaultGoods);
     }
     
+    /**
+     * Constructs a freight car with invalid goods type.
+     * Should throw a train exception.
+     * This test passes. 
+     * @throws TrainException
+     */
     @SuppressWarnings("unused")
 	@Test (expected=TrainException.class)
     public void testInvalidFreightCarType() throws TrainException {
     	FreightCar freight1 = new FreightCar(defaultWeight, invalidGoods);
     }
     
+    /**
+     * Constructs a freight car and tests it with valid weight.
+     * This test passes.
+     * @throws TrainException
+     */
     @Test
     public void testFreightCarWeight() throws TrainException {
     	FreightCar freight1 = new FreightCar(defaultWeight, defaultGoods);
     	assertEquals(freight1.getGrossWeight(), defaultWeight);
     }
     
+    /**
+     * Constructs a freight car with an invalid weight.
+     * Should through a train exception. 
+     * This test passes.
+     * @throws TrainException
+     */
     @SuppressWarnings("unused")
     @Test (expected=TrainException.class)
     public void testInvalidFreightCarWeight() throws TrainException {
     	FreightCar freight1 = new FreightCar(invalidWeight, defaultGoods);
     }
     
+    /**
+     * 
+     * @throws TrainException
+     */
     @Test
     public void testLocomotivePower() throws TrainException {
     	Locomotive locomotive1 = new Locomotive(defaultWeight, defaultClassification);
