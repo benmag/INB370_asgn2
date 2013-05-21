@@ -20,6 +20,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.border.Border;
 
 /**
  * @author hogan
@@ -33,6 +34,11 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 
 	private JPanel btmPanel;
 	private Canvas drawPanel;
+	private JPanel trainPanel;
+	private JPanel RollingStockPanel;
+	private JLabel stockLabel;
+	private final int DEFAULT_CARRIAGE_WIDTH = 90;
+	private final int DEFAULT_CARRIAGE_HEIGHT = 90;
 	
 	private DepartingTrain myTrain = new DepartingTrain();
 	 
@@ -44,7 +50,6 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 	public GUITest_Ben(String arg0) throws HeadlessException, TrainException {
 		super(arg0);
 		createGUI();
-		drawTrain();
 	}
 	
 	
@@ -75,26 +80,68 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 		myTrain.addCarriage(freight4);
 		// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 		
+		
+		// Setup trainPanel 
+	    trainPanel = new JPanel();
+	    trainPanel.setLayout(new FlowLayout());
+	    add(trainPanel,BorderLayout.WEST);
+	    
 		RollingStock carriage = myTrain.nextCarriage();
 		
 		while(carriage != null) {
 			
-			System.out.println(carriage.toString());
+			if(carriage.toString().contains("Loco")){ // locomotive carriage
+			
+			    spawnStock(carriage.toString(), Color.YELLOW);
+			    
+			} else if(carriage.toString().contains("Passenger")) { // passenger carriage
+
+				spawnStock(carriage.toString(), Color.RED);
+			    
+			} else if(carriage.toString().contains("Freight")) {
+				
+				spawnStock(carriage.toString(), Color.GREEN);
+			    
+			} else {
+				throw new TrainException("Unknown RollingStock type detected in drawTrain()");
+			}
+		
+			
+			// Get the next carriage
 			carriage = myTrain.nextCarriage();
-		} 
+			
+		}
 		
 		
+		// All additions to trainPanel have been made, show it!
+	    setVisible(true);
+			
 	}
+	
+	private void spawnStock(String stockText, Color selectedColor) {
+		
+		// Create loco panel
+		RollingStockPanel = new JPanel();		
+		RollingStockPanel.setBackground(selectedColor);
+		RollingStockPanel.setPreferredSize(new Dimension(DEFAULT_CARRIAGE_WIDTH, DEFAULT_CARRIAGE_HEIGHT));
+	    
+		// Add label 
+		stockLabel = new JLabel();
+	    stockLabel.setText(stockText);
+	    RollingStockPanel.add(stockLabel);
+	    
+	    // Add panel to the train panel
+	    trainPanel.add(RollingStockPanel);
+	}
+
+
 	private void createGUI() {
 		setSize(WIDTH, HEIGHT);
 	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    setLayout(new BorderLayout());
+	   
+	    
 
-	    drawPanel = new Canvas();
-	    drawPanel.setBackground(Color.LIGHT_GRAY);
-	    
-	    add(drawPanel,BorderLayout.CENTER);
-	    
 	    createControlPanel();
 	}
 
@@ -126,8 +173,12 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 	  String buttonString = e.getActionCommand();
 
 	  if (buttonString.equals("Add Locomotive")) {
-		 drawPanel.figure=Canvas.RECTANGLE;
-	     drawPanel.repaint();
+			try {
+				drawTrain();
+			} catch (TrainException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}	    		    
 	  } else if (buttonString.equals("Add Passenger Cars")) {
 		 drawPanel.figure=Canvas.SQUARE;
 		 drawPanel.repaint();
