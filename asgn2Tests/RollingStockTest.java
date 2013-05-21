@@ -4,10 +4,11 @@
  */
 package asgn2Tests;
 
-import asgn2Exceptions.TrainException;
-import asgn2RollingStock.*;
 
 import org.junit.Test;
+
+import asgn2Exceptions.TrainException;
+import asgn2RollingStock.*;
 import static org.junit.Assert.*;
 
 /**
