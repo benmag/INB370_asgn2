@@ -40,15 +40,7 @@ public class DepartingTrain extends Object {
 	private int precedingCarriageCall = 0; // track if firstCarriage or nextCarriage has been called
 	private boolean freightCarriageAdded = false; // track if we have any passenger carriages 
 
-	/* 
-	 * Constructs a (potential) train object containing no carriages (yet).
-	 */
-	public DepartingTrain() {
-	
-		// Not really sure what to do in here yet.
-		//NEW TRAIN OBJECT: DepartingTrain myTrain = new DepartingTrain();
-	
-	}
+	//NEW TRAIN OBJECT: DepartingTrain myTrain = new DepartingTrain();
 	
 	
 	/* 
