@@ -3,6 +3,13 @@
  */
 package asgn2GUI;
 
+import asgn2Exceptions.TrainException;
+import asgn2RollingStock.FreightCar;
+import asgn2RollingStock.Locomotive;
+import asgn2RollingStock.PassengerCar;
+import asgn2RollingStock.RollingStock;
+import asgn2Train.DepartingTrain;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,16 +33,58 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 
 	private JPanel btmPanel;
 	private Canvas drawPanel;
+	
+	private DepartingTrain myTrain = new DepartingTrain();
 	 
 	/**
 	 * @param arg0
 	 * @throws HeadlessException
+	 * @throws TrainException 
 	 */
-	public GUITest_Ben(String arg0) throws HeadlessException {
+	public GUITest_Ben(String arg0) throws HeadlessException, TrainException {
 		super(arg0);
 		createGUI();
+		drawTrain();
 	}
 	
+	
+	private void drawTrain() throws TrainException {
+		
+		Integer defaultWeight = 50;
+		Integer defaultTooHeavyWeight = 500000;
+		Integer defaultSeats = 50;
+	    String defaultGoods = "G";
+	    String defaultClassification = "4S";
+	    
+	    
+		// ~~~~~~~~~~~~ test train setup ~~~~~~~~~~~~~ //
+		Locomotive loco = new Locomotive(defaultWeight, defaultClassification);
+		
+		PassengerCar pass1 = new PassengerCar(defaultTooHeavyWeight, defaultSeats);
+		FreightCar freight1 = new FreightCar(defaultWeight, defaultGoods);		
+		FreightCar freight2 = new FreightCar(defaultWeight, defaultGoods);		
+		FreightCar freight3 = new FreightCar(defaultWeight, defaultGoods);		
+		FreightCar freight4 = new FreightCar(defaultWeight, defaultGoods);		
+
+		
+		myTrain.addCarriage(loco);
+		myTrain.addCarriage(pass1);
+		myTrain.addCarriage(freight1);
+		myTrain.addCarriage(freight2);
+		myTrain.addCarriage(freight3);
+		myTrain.addCarriage(freight4);
+		// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
+		
+		RollingStock carriage = myTrain.nextCarriage();
+		
+		while(carriage != null) {
+			
+			System.out.println(carriage.toString());
+			carriage = myTrain.nextCarriage();
+		} 
+		
+		
+	}
 	private void createGUI() {
 		setSize(WIDTH, HEIGHT);
 	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -92,8 +141,10 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 
 	/**
 	 * @param args
+	 * @throws TrainException 
+	 * @throws HeadlessException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws HeadlessException, TrainException {
 		GUITest_Ben gui = new GUITest_Ben("DumbGraphicsExample");
 	    gui.setVisible(true);
 
