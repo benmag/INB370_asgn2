@@ -26,6 +26,9 @@ package asgn2Train;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.print.DocFlavor.READER;
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.RestoreAction;
+
 
 import asgn2Exceptions.TrainException;
 import asgn2RollingStock.Locomotive;
@@ -35,7 +38,7 @@ import asgn2RollingStock.PassengerCar;
 public class DepartingTrain extends Object {
 	
 	List<RollingStock> stockList = new ArrayList<RollingStock>(); // Create a list that contains all rolling stock
-	private final int EMPTY = 0, FIRST = 0, LOCOPOS = 0;
+	private final int EMPTY = 0, FIRST = 0, LOCOPOS = 0, SIZE_FIX = 1;
 	private int currentCarriagePos = 0;
 	private int precedingCarriageCall = 0; // track if firstCarriage or nextCarriage has been called
 	private boolean freightCarriageAdded = false; // track if we have any passenger carriages 
@@ -71,15 +74,20 @@ public class DepartingTrain extends Object {
 	
 	public RollingStock nextCarriage() {
 		
-		if(currentCarriagePos < stockList.size()) {
+		// If currentCarriagePos within stockList
+		if(currentCarriagePos < stockList.size() - SIZE_FIX) {
 			
-			if(precedingCarriageCall == 0) {
+			if(precedingCarriageCall == FIRST) {
 				return firstCarriage();
 			} else {
+				// Get the next carriage
 				this.currentCarriagePos++;
 				return stockList.get(currentCarriagePos);	
 			}
 		} else {
+			// Reset count for next time 
+			this.currentCarriagePos = FIRST;
+			this.precedingCarriageCall = FIRST;
 			return null;
 		}
 			
@@ -284,7 +292,7 @@ public class DepartingTrain extends Object {
 				"'U'0 0  0 0  0 0  0 0    \n");*/
 				
 		// Loop through and append carriage info to train 
-		 for (int carPos = 0; carPos < stockList.size(); carPos++) {
+		for (int carPos = 0; carPos < stockList.size(); carPos++) {
 		      
 			 
 			 // Build carriage

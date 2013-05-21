@@ -191,9 +191,39 @@ public class TrainTests {
 		myTrain.addCarriage(freight1);
 		myTrain.addCarriage(freight1);
 
+		assertEquals(loco1.toString(), myTrain.nextCarriage().toString());
+		assertEquals(freight1, myTrain.nextCarriage());
+		assertEquals(freight1, myTrain.nextCarriage());
+		
+	}
+	
+	/*
+	 * Test to see if nextCarriage again after it's already been used
+	 * 
+	 * @result Carriages are returned in correct order
+	 */
+	@Test
+	public void testNextCarriageWorksTwice() throws TrainException {
+		
+		DepartingTrain myTrain = new DepartingTrain();
+    	Locomotive loco1 = new Locomotive(defaultWeight, defaultClassification);
+    	FreightCar freight1 = new FreightCar(defaultWeight, defaultGoods);
+    	
+		myTrain.addCarriage(loco1);
+		myTrain.addCarriage(freight1);
+		myTrain.addCarriage(freight1);
+
 		assertEquals(loco1, myTrain.nextCarriage());
 		assertEquals(freight1, myTrain.nextCarriage());
 		assertEquals(freight1, myTrain.nextCarriage());
+		assertEquals(null, myTrain.nextCarriage());
+		
+		// nextCarriage should now start from the beginning
+		assertEquals(loco1.toString(), myTrain.nextCarriage().toString());
+		assertEquals(freight1, myTrain.nextCarriage());
+		assertEquals(freight1, myTrain.nextCarriage());
+		
+		
 		
 	}
 	
