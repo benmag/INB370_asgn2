@@ -130,7 +130,6 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 		constraints.anchor = GridBagConstraints.CENTER;
 		constraints.weightx = 100;
 		constraints.weighty = 100;
-		addToPanel(locoPanel, locoPowerText, constraints, 40, 40, 150, 150);
 
 		locoPanel.setSize(300, 500);
 	    locoPanel.setBackground(Color.GRAY);
