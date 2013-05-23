@@ -35,7 +35,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 	private JPanel btmPanel;
 	private Canvas drawPanel;
 	private JPanel trainPanel;
-	private JFrame locoPanel;
+	private JFrame locoPanel, passPanel;
 	private JPanel RollingStockPanel;
 	private JLabel stockLabel;
 	private JTextField locoPowerText;
@@ -53,6 +53,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 		super(arg0);
 		createGUI();
 		createAddLoco();
+		createAddPass();
 	}
 
 
@@ -66,7 +67,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 
 
 		// ~~~~~~~~~~~~ test train setup ~~~~~~~~~~~~~ //
-		Locomotive loco = new Locomotive(defaultWeight, defaultClassification);
+		/*Locomotive loco = new Locomotive(defaultWeight, defaultClassification);
 
 		PassengerCar pass1 = new PassengerCar(defaultTooHeavyWeight, defaultSeats);
 		FreightCar freight1 = new FreightCar(defaultWeight, defaultGoods);
@@ -80,7 +81,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 		myTrain.addCarriage(freight1);
 		myTrain.addCarriage(freight2);
 		myTrain.addCarriage(freight3);
-		myTrain.addCarriage(freight4);
+		myTrain.addCarriage(freight4);*/
 		// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 
 
@@ -134,6 +135,38 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 		locoPanel.setSize(300, 500);
 	    locoPanel.setBackground(Color.GRAY);
 	    locoPanel.setVisible(false);
+	}
+
+    
+    private void createAddPass() {
+    	passPanel = new JFrame("FrameDemo");
+
+    	//2. Optional: What happens when the frame closes?
+    	passPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+    	//3. Create components and put them in the frame.
+    	//...create emptyLabel...
+    	JLabel emptyLabel = new JLabel();
+    	emptyLabel.setPreferredSize(new Dimension(175, 100));
+    	
+    	passPanel.getContentPane().add(emptyLabel, BorderLayout.CENTER);
+
+    	//4. Size the frame.
+    	passPanel.pack();
+
+	    btmPanel = new JPanel();
+	    btmPanel.setBackground(Color.LIGHT_GRAY);
+        btmPanel.setLayout(new FlowLayout());
+
+	    JButton loadButton = new JButton("Save");
+	    loadButton.setBackground(Color.WHITE);
+	    //loadButton.addActionListener(this);
+	    btmPanel.add(loadButton);
+	    
+	    passPanel.add(btmPanel, BorderLayout.SOUTH);
+	    
+    	//5. Show it.
+    	passPanel.setVisible(false);
 	}
 
 	private void spawnStock(String stockText, Color selectedColor) {
@@ -191,16 +224,9 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 	  String buttonString = e.getActionCommand();
 
 	  if (buttonString.equals("Add Locomotive")) {
-			try {
-			    locoPanel.setVisible(true);
-				drawTrain();
-			} catch (TrainException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+		  locoPanel.setVisible(true);
 	  } else if (buttonString.equals("Add Passenger Cars")) {
-		 drawPanel.figure=Canvas.SQUARE;
-		 drawPanel.repaint();
+		  passPanel.setVisible(true);
 	  } else if (buttonString.equals("Add Freight Cars")) {
 		 drawPanel.figure=Canvas.STRING;
 		 drawPanel.repaint();
