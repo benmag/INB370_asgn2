@@ -15,6 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -31,6 +32,9 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 	private static final long serialVersionUID = -7031008862559936404L;
 	public static final int WIDTH = 600;
 	public static final int HEIGHT = 250;
+	
+	
+	private static final int MULTIPLY = 100;
 
 	private JPanel btmPanel;
 	private Canvas drawPanel;
@@ -38,12 +42,22 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 	private JFrame locoPanel, passPanel;
 	private JPanel RollingStockPanel;
 	private JLabel stockLabel;
-	private JTextField locoPowerText;
-	private final int DEFAULT_CARRIAGE_WIDTH = 90;
+	private JTextField locoPowerText,grossWeight_field,numberOfSeats_field;
+	private JComboBox engineList;
+	private JComboBox powerList;
+	private final int DEFAULT_CARRIAGE_WIDTH = 110;
 	private final int DEFAULT_CARRIAGE_HEIGHT = 90;
 
+	
+	// TRAIN 
 	private DepartingTrain myTrain = new DepartingTrain();
 
+	private String trainClassification;
+	private Integer trainGrossWeight;
+	
+	private Integer grossWeight;
+	private Integer numberOfSeats;
+	
 	/**
 	 * @param arg0
 	 * @throws HeadlessException
@@ -52,36 +66,28 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 	public GUITest_Ben(String arg0) throws HeadlessException, TrainException {
 		super(arg0);
 		createGUI();
-		createAddLoco();
+		createAddLocov2();
 		createAddPass();
 	}
 
 
 	private void drawTrain() throws TrainException {
-
-		Integer defaultWeight = 50;
-		Integer defaultTooHeavyWeight = 500000;
-		Integer defaultSeats = 50;
-	    String defaultGoods = "G";
-	    String defaultClassification = "4S";
-
-
 		// ~~~~~~~~~~~~ test train setup ~~~~~~~~~~~~~ //
-		/*Locomotive loco = new Locomotive(defaultWeight, defaultClassification);
+		//Locomotive loco = new Locomotive(defaultWeight, defaultClassification);
 
-		PassengerCar pass1 = new PassengerCar(defaultTooHeavyWeight, defaultSeats);
-		FreightCar freight1 = new FreightCar(defaultWeight, defaultGoods);
-		FreightCar freight2 = new FreightCar(defaultWeight, defaultGoods);
-		FreightCar freight3 = new FreightCar(defaultWeight, defaultGoods);
-		FreightCar freight4 = new FreightCar(defaultWeight, defaultGoods);
+//		PassengerCar pass1 = new PassengerCar(defaultTooHeavyWeight, defaultSeats);
+		//FreightCar freight1 = new FreightCar(defaultWeight, defaultGoods);
+		//FreightCar freight2 = new FreightCar(defaultWeight, defaultGoods);
+		//FreightCar freight3 = new FreightCar(defaultWeight, defaultGoods);
+		//FreightCar freight4 = new FreightCar(defaultWeight, defaultGoods);
 
 
-		myTrain.addCarriage(loco);
-		myTrain.addCarriage(pass1);
-		myTrain.addCarriage(freight1);
-		myTrain.addCarriage(freight2);
-		myTrain.addCarriage(freight3);
-		myTrain.addCarriage(freight4);*/
+		//myTrain.addCarriage(loco);
+		//myTrain.addCarriage(pass1);
+		//myTrain.addCarriage(freight1);
+		//myTrain.addCarriage(freight2);
+		//myTrain.addCarriage(freight3);
+		//myTrain.addCarriage(freight4);
 		// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 
 
@@ -91,9 +97,9 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 	    add(trainPanel,BorderLayout.WEST);
 
 		RollingStock carriage = myTrain.nextCarriage();
-
+		
 		while(carriage != null) {
-
+			
 			if(carriage.toString().contains("Loco")){ // locomotive carriage
 
 			    spawnStock(carriage.toString(), Color.YELLOW);
@@ -113,7 +119,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 
 			// Get the next carriage
 			carriage = myTrain.nextCarriage();
-
+		
 		}
 
 
@@ -138,34 +144,103 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 	}
 
     
-    private void createAddPass() {
-    	passPanel = new JFrame("FrameDemo");
+    /**
+     * 
+     */
+    private void createAddLocov2() {
+    	locoPanel = new JFrame("Add locomotive carriage");
+    	//2. Optional: What happens when the frame closes?
+    	locoPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	
+    	// Create input panel
+    	JPanel inputPanel = new JPanel();
+    	inputPanel.setLayout(new FlowLayout( FlowLayout.CENTER, 5,5));
 
+    	// -- Create inputs -- //  	
+    	//Create the engine list box
+    	String[] engineTypes = { "E", "D", "S" }; // list of engines
+    	engineList = new JComboBox(engineTypes); // listbox element
+    	inputPanel.add(engineList); // add it to our input panel
+    	
+    	//Create the power class list box
+    	String[] powerClasses = { "1", "2", "3", "4", "5", "6", "7", "8", "9" }; // list of engines
+    	powerList = new JComboBox(powerClasses); // listbox element
+    	inputPanel.add(powerList); // add it to our input panel
+    	
+    	// ----------------- //
+    	
+    	
+    	/* DONT NEED THIS
+    	JTextField tf = new JTextField();
+       	tf.setColumns( 20 );
+
+       	inputPanel.add(tf);*/           
+    	
+    	locoPanel.getContentPane().add(inputPanel, BorderLayout.CENTER);
+
+    	
+    	//4. Size the frame.
+    	locoPanel.pack();
+    	locoPanel.setSize(300,120);
+
+    	btmPanel = new JPanel();
+    	btmPanel.setBackground(Color.LIGHT_GRAY);
+    	btmPanel.setLayout(new FlowLayout());
+
+    	JButton loadButton = new JButton("Save Locomotive");
+    	loadButton.setBackground(Color.WHITE);
+    	loadButton.addActionListener(this);
+    	btmPanel.add(loadButton);
+
+    	locoPanel.add(btmPanel, BorderLayout.SOUTH);
+
+    	//5. Hide it to be shown when we're ready.
+    	locoPanel.setVisible(false);
+	}  
+    
+    private void createAddPass() {
+    	passPanel = new JFrame("Add Passenger Carriage");
     	//2. Optional: What happens when the frame closes?
     	passPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-    	//3. Create components and put them in the frame.
-    	//...create emptyLabel...
-    	JLabel emptyLabel = new JLabel();
-    	emptyLabel.setPreferredSize(new Dimension(175, 100));
     	
-    	passPanel.getContentPane().add(emptyLabel, BorderLayout.CENTER);
+    	// Create input panel
+    	JPanel inputPanel = new JPanel();
+    	inputPanel.setLayout(new FlowLayout( FlowLayout.CENTER, 5,5));
 
+    	// -- Create inputs -- //  	  	
+      	grossWeight_field = new JTextField();
+      	grossWeight_field.setColumns( 20 );
+
+      	inputPanel.add(new Label("Gross Weight"));
+      	inputPanel.add(grossWeight_field);           
+      	
+       	
+       	numberOfSeats_field = new JTextField();
+       	numberOfSeats_field.setColumns( 20 );
+
+       	inputPanel.add(new Label("Number of seats (in tonnes)"));
+       	inputPanel.add(numberOfSeats_field);           
+    	
+    	// ------------------ //
+       	
+       	passPanel.getContentPane().add(inputPanel, BorderLayout.CENTER);
+    	
     	//4. Size the frame.
     	passPanel.pack();
+    	passPanel.setSize(300,200);
 
-	    btmPanel = new JPanel();
-	    btmPanel.setBackground(Color.LIGHT_GRAY);
-        btmPanel.setLayout(new FlowLayout());
+    	btmPanel = new JPanel();
+    	btmPanel.setBackground(Color.LIGHT_GRAY);
+    	btmPanel.setLayout(new FlowLayout());
 
-	    JButton loadButton = new JButton("Save");
-	    loadButton.setBackground(Color.WHITE);
-	    //loadButton.addActionListener(this);
-	    btmPanel.add(loadButton);
-	    
-	    passPanel.add(btmPanel, BorderLayout.SOUTH);
-	    
-    	//5. Show it.
+    	JButton loadButton = new JButton("Save Passenger Carriage");
+    	loadButton.setBackground(Color.WHITE);
+    	loadButton.addActionListener(this);
+    	btmPanel.add(loadButton);
+
+    	passPanel.add(btmPanel, BorderLayout.SOUTH);
+
+    	//5. Hide it to be shown when we're ready.
     	passPanel.setVisible(false);
 	}
 
@@ -221,15 +296,59 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-	  String buttonString = e.getActionCommand();
+		
+		String buttonString = e.getActionCommand();
 
-	  if (buttonString.equals("Add Locomotive")) {
-		  locoPanel.setVisible(true);
-	  } else if (buttonString.equals("Add Passenger Cars")) {
-		  passPanel.setVisible(true);
-	  } else if (buttonString.equals("Add Freight Cars")) {
-		 drawPanel.figure=Canvas.STRING;
-		 drawPanel.repaint();
+		if (buttonString.equals("Add Locomotive")) {
+			locoPanel.setVisible(true);
+		} else if (buttonString.equals("Add Passenger Cars")) {
+			passPanel.setVisible(true);
+		} else if (buttonString.equals("Add Freight Cars")) {
+			drawPanel.figure=Canvas.STRING;
+			drawPanel.repaint();
+		} else if(buttonString.equals("Save Locomotive")) {
+		  
+			// fetch logo info from our input objects
+			this.trainClassification = (String)(String) powerList.getSelectedItem() + "" + (String) engineList.getSelectedItem(); 
+			this.trainGrossWeight = Integer.parseInt((String) powerList.getSelectedItem()) * MULTIPLY;
+			
+			
+			// Create the loco motive carriage
+			try {
+				Locomotive locomotive = new Locomotive(this.trainGrossWeight, this.trainClassification);
+				myTrain.addCarriage(locomotive);
+				locoPanel.setVisible(false);
+				drawTrain();
+			} catch (TrainException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+					  
+		  
+	  } else if(buttonString.equals("Save Passenger Carriage")) {
+			// fetch logo info from our input objects
+			this.grossWeight = Integer.parseInt(grossWeight_field.getText());
+			this.numberOfSeats = Integer.parseInt(numberOfSeats_field.getText());
+			
+			
+			// Create the loco motive carriage
+			try {
+				PassengerCar pass = new PassengerCar(this.grossWeight, this.numberOfSeats);	
+				myTrain.addCarriage(pass);
+				
+				
+				// Clear passPanel window
+				numberOfSeats_field.setText("");
+				grossWeight_field.setText("");
+				
+				passPanel.setVisible(false);
+				drawTrain();
+			} catch (TrainException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+					  
+		  
 	  } else {
 	     System.err.println("Unexpected Error");
 	  }
