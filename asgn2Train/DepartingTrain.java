@@ -38,9 +38,9 @@ import asgn2RollingStock.PassengerCar;
 public class DepartingTrain extends Object {
 	
 	List<RollingStock> stockList = new ArrayList<RollingStock>(); // Create a list that contains all rolling stock
-	private final int EMPTY = 0, FIRST = 0, LOCOPOS = 0, SIZE_FIX = 1;
+	private final int EMPTY = 0, START_POS = 0, LOCOPOS = 0, SIZE_FIX = 1;
 	private int currentCarriagePos = 0;
-	private int precedingCarriageCall = 0; // track if firstCarriage or nextCarriage has been called
+	private Boolean firstCarriageCalled = false; // track if firstCarriage or nextCarriage has been called
 	private boolean freightCarriageAdded = false; // track if we have any passenger carriages 
 
 	//NEW TRAIN OBJECT: DepartingTrain myTrain = new DepartingTrain();
@@ -55,10 +55,9 @@ public class DepartingTrain extends Object {
 	public RollingStock firstCarriage() {
 		
 		if(stockList.size() > EMPTY) { // we have at least one carriage
-			this.precedingCarriageCall++; // track preceding carriage call
-			return stockList.get(FIRST); // get the first this MUST be a locomotive
+			this.firstCarriageCalled = true; // track preceding carriage call
+			return stockList.get(START_POS); // get the first this MUST be a locomotive
 		} else { // no carriages
-			System.out.println("No carriages on this train!");
 			return null;
 		}
 		
@@ -74,22 +73,20 @@ public class DepartingTrain extends Object {
 	
 	public RollingStock nextCarriage() {
 		
-		// If currentCarriagePos within stockList
-		if(currentCarriagePos < stockList.size() - SIZE_FIX) {
+		// If we haven't called the firstCarriage method yet, call it.	
+		if(firstCarriageCalled == false) {
+			return firstCarriage();
+		} else if(stockList.size() - SIZE_FIX > currentCarriagePos) { // if carriage pos within stocklist return it
+			// Get the next carriage
+			this.currentCarriagePos++;
+			return stockList.get(currentCarriagePos);
 			
-			if(precedingCarriageCall == FIRST) {
-				return firstCarriage();
-			} else {
-				// Get the next carriage
-				this.currentCarriagePos++;
-				return stockList.get(currentCarriagePos);	
-			}
 		} else {
-			// Reset count for next time 
-			this.currentCarriagePos = FIRST;
-			this.precedingCarriageCall = FIRST;
-			return null;
+			this.currentCarriagePos = START_POS;
+			this.firstCarriageCalled = false;
+			return null;				
 		}
+		
 			
 	}
 	
@@ -221,7 +218,7 @@ public class DepartingTrain extends Object {
 		if(stockList.size() > EMPTY) {
 			
 			// Check if it's allowed to be added
-			if(newCarriage.toString().contains("Loco") && stockList.get(FIRST).toString().contains("Loco")) {
+			if(newCarriage.toString().contains("Loco") && stockList.get(START_POS).toString().contains("Loco")) {
 				// We've already got one locomotive, another cannot be added.
 				throw new TrainException("Invalid train configuration. Cannot addCarriage(). Only one locomotive per train. ");
 			} else if(freightCarriageAdded == true && newCarriage.toString().contains("Passenger")) {
@@ -328,11 +325,7 @@ public class DepartingTrain extends Object {
 			 
 		 }
 		 
-		 System.out.println(line1);
-		 System.out.println(line2);
-		 System.out.println(line3);
-		 System.out.println();
-		return null;
+		 return line1 + " \n " + line2 + " \n " +line3;
 	}
 
 }

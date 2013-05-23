@@ -191,9 +191,10 @@ public class TrainTests {
 		myTrain.addCarriage(freight1);
 		myTrain.addCarriage(freight1);
 
-		assertEquals(loco1.toString(), myTrain.nextCarriage().toString());
+		assertEquals(loco1, myTrain.nextCarriage());
 		assertEquals(freight1, myTrain.nextCarriage());
 		assertEquals(freight1, myTrain.nextCarriage());
+		assertEquals(null, myTrain.nextCarriage());
 		
 	}
 	
