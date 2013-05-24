@@ -417,6 +417,33 @@ public class TrainTests {
 	}
 	
 	
+	/*
+	 * Test to see if the remove method works 
+	 *  
+	 * @result train becomes empty  
+	 */
+	@Test
+	public void trainRemoveCarriage() throws TrainException {
+		
+		DepartingTrain myTrain = new DepartingTrain();
+		Locomotive loco = new Locomotive(defaultWeight, defaultClassification);
+				
+		PassengerCar pass1 = new PassengerCar(defaultTooHeavyWeight, defaultSeats);
+
+		myTrain.addCarriage(loco);
+		myTrain.addCarriage(pass1);
+		
+		myTrain.removeCarriage();
+		
+		assertEquals(loco, myTrain.nextCarriage());
+		assertEquals(null, myTrain.nextCarriage());
+		
+		myTrain.addCarriage(pass1);
+		myTrain.nextCarriage();
+		
+		assertEquals(pass1, myTrain.nextCarriage());
+	}
+	
 	
 	/*
 	 * Test to see if the code recongizes that the train can't move due to the weight
