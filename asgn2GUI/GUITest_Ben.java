@@ -68,6 +68,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 		createAddLocov2();
 		createAddPass();
 		createAddFreight();
+		drawTrain();
 	}
 
 
@@ -80,6 +81,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 		RollingStock carriage = myTrain.nextCarriage();
 		
 		while(carriage != null) {
+			System.out.print(carriage.toString() + " -- ");
 			
 			if(carriage.toString().contains("Loco")){ // locomotive carriage
 
@@ -100,13 +102,13 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 
 			// Get the next carriage
 			carriage = myTrain.nextCarriage();
-		
+			
 		}
 
 
 		// All additions to trainPanel have been made, show it!
 	    setVisible(true);
-
+	    repaint();
 	}
 
 	
@@ -345,6 +347,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 			freightPanel.setVisible(true);
 		} else if(buttonString.equals("Remove last Carriage")) {
 			try {
+				remove(trainPanel);
 				myTrain.removeCarriage();
 				drawTrain();
 			} catch (TrainException e1) {
