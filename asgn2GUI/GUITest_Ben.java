@@ -39,12 +39,11 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 	private JPanel btmPanel;
 	private Canvas drawPanel;
 	private JPanel trainPanel;
-	private JFrame locoPanel, passPanel;
+	private JFrame locoPanel, passPanel, freightPanel;
 	private JPanel RollingStockPanel;
 	private JLabel stockLabel;
-	private JTextField locoPowerText,grossWeight_field,numberOfSeats_field;
-	private JComboBox engineList;
-	private JComboBox powerList;
+	private JTextField locoPowerText,grossWeight_field,freightGrossWeight_field,numberOfSeats_field;
+	private JComboBox engineList, powerList, goodsList;
 	private final int DEFAULT_CARRIAGE_WIDTH = 110;
 	private final int DEFAULT_CARRIAGE_HEIGHT = 90;
 
@@ -68,29 +67,11 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 		createGUI();
 		createAddLocov2();
 		createAddPass();
+		createAddFreight();
 	}
 
 
 	private void drawTrain() throws TrainException {
-		// ~~~~~~~~~~~~ test train setup ~~~~~~~~~~~~~ //
-		//Locomotive loco = new Locomotive(defaultWeight, defaultClassification);
-
-//		PassengerCar pass1 = new PassengerCar(defaultTooHeavyWeight, defaultSeats);
-		//FreightCar freight1 = new FreightCar(defaultWeight, defaultGoods);
-		//FreightCar freight2 = new FreightCar(defaultWeight, defaultGoods);
-		//FreightCar freight3 = new FreightCar(defaultWeight, defaultGoods);
-		//FreightCar freight4 = new FreightCar(defaultWeight, defaultGoods);
-
-
-		//myTrain.addCarriage(loco);
-		//myTrain.addCarriage(pass1);
-		//myTrain.addCarriage(freight1);
-		//myTrain.addCarriage(freight2);
-		//myTrain.addCarriage(freight3);
-		//myTrain.addCarriage(freight4);
-		// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
-
-
 		// Setup trainPanel
 	    trainPanel = new JPanel();
 	    trainPanel.setLayout(new FlowLayout());
@@ -128,6 +109,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 
 	}
 
+	
     private void createAddLoco() {
 	    locoPanel = new JFrame();
 	    locoPowerText = new JTextField();
@@ -243,6 +225,56 @@ public class GUITest_Ben extends JFrame implements ActionListener {
     	//5. Hide it to be shown when we're ready.
     	passPanel.setVisible(false);
 	}
+    
+    
+    
+    private void createAddFreight() {
+    	freightPanel = new JFrame("Add freight carriage");
+    	//2. Optional: What happens when the frame closes?
+    	freightPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	
+    	// Create input panel
+    	JPanel inputPanel = new JPanel();
+    	inputPanel.setLayout(new FlowLayout( FlowLayout.CENTER, 5,5));
+
+    	// -- Create inputs -- //  	
+    	//Create the goods type list box
+    	String[] goodTypes = { "G", "D", "R" }; // list of engines
+    	goodsList = new JComboBox(goodTypes); // listbox element
+    	inputPanel.add(goodsList); // add it to our input panel
+    	
+    	
+    	// Create the gross weight input box
+    	freightGrossWeight_field = new JTextField();
+    	freightGrossWeight_field.setColumns( 20 );
+
+       	inputPanel.add(freightGrossWeight_field);           
+
+       	
+    	// ----------------- //
+    	
+    	
+    	freightPanel.getContentPane().add(inputPanel, BorderLayout.CENTER);
+
+    	
+    	//4. Size the frame.
+    	freightPanel.pack();
+    	freightPanel.setSize(300,120);
+
+    	btmPanel = new JPanel();
+    	btmPanel.setBackground(Color.LIGHT_GRAY);
+    	btmPanel.setLayout(new FlowLayout());
+
+    	JButton loadButton = new JButton("Save Freight Carriage");
+    	loadButton.setBackground(Color.WHITE);
+    	loadButton.addActionListener(this);
+    	btmPanel.add(loadButton);
+
+    	freightPanel.add(btmPanel, BorderLayout.SOUTH);
+
+    	//5. Hide it to be shown when we're ready.
+    	freightPanel.setVisible(false);
+	}  
 
 	private void spawnStock(String stockText, Color selectedColor) {
 
@@ -292,6 +324,12 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 	    findButton.addActionListener(this);
 	    btmPanel.add(findButton);
 
+	    JButton removeButton = new JButton("Remove last Carriage");
+	    removeButton.setBackground(Color.WHITE);
+	    removeButton.addActionListener(this);
+	    btmPanel.add(removeButton);
+
+	    
 	    this.getContentPane().add(btmPanel, BorderLayout.SOUTH);
 	}
 
@@ -304,8 +342,15 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 		} else if (buttonString.equals("Add Passenger Cars")) {
 			passPanel.setVisible(true);
 		} else if (buttonString.equals("Add Freight Cars")) {
-			drawPanel.figure=Canvas.STRING;
-			drawPanel.repaint();
+			freightPanel.setVisible(true);
+		} else if(buttonString.equals("Remove last Carriage")) {
+			try {
+				myTrain.removeCarriage();
+				drawTrain();
+			} catch (TrainException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		} else if(buttonString.equals("Save Locomotive")) {
 		  
 			// fetch logo info from our input objects
@@ -349,6 +394,28 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 			}
 					  
 		  
+	  } else if(buttonString.equals("Save Freight Carriage")) {
+			// fetch logo info from our input objects
+			Integer freight_grossWeight = Integer.parseInt(freightGrossWeight_field.getText());
+			String freight_goods = (String) goodsList.getSelectedItem();
+			
+			
+			// Create the loco motive carriage
+			try {
+				FreightCar freight = new FreightCar(freight_grossWeight, freight_goods);	
+				myTrain.addCarriage(freight);
+				
+				
+				// Clear passPanel window
+				freightGrossWeight_field.setText("");
+				
+				freightPanel.setVisible(false);
+				drawTrain();
+			} catch (TrainException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+				
 	  } else {
 	     System.err.println("Unexpected Error");
 	  }

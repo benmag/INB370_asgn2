@@ -264,7 +264,9 @@ public class DepartingTrain extends Object {
 		} else if(stockList.size() == EMPTY) {
 			throw new TrainException("Cannot removeCarriage(). No rolling stock on the train.");
 		} else {
-			stockList.remove(stockList.size());	
+			System.out.println("Remoing carriage");
+			stockList.remove(stockList.size()-SIZE_FIX);
+			System.out.println(stockList.size());
 		}
 		
 	}
