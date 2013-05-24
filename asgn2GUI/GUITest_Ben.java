@@ -19,6 +19,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
@@ -39,6 +40,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 	private JPanel btmPanel;
 	private Canvas drawPanel;
 	private JPanel trainPanel;
+	private JScrollPane scroll;
 	private JFrame locoPanel, passPanel, freightPanel;
 	private JPanel RollingStockPanel;
 	private JLabel stockLabel;
@@ -46,7 +48,9 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 	private JComboBox engineList, powerList, goodsList;
 	private final int DEFAULT_CARRIAGE_WIDTH = 110;
 	private final int DEFAULT_CARRIAGE_HEIGHT = 90;
-
+	private final int DEFAULT_TRAIN_CONTAINER_WIDTH = 400;
+	private final int DEFAULT_TRAIN_CONTAINER_HEIGHT = 150;
+	
 	
 	// TRAIN 
 	private DepartingTrain myTrain = new DepartingTrain();
@@ -65,6 +69,34 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 	public GUITest_Ben(String arg0) throws HeadlessException, TrainException {
 		super(arg0);
 		createGUI();
+		
+		setPreferredSize(new Dimension(200, 250));
+        
+		// Create a new JPanel to hold the train scroll
+		JPanel train_container = new JPanel();
+		train_container.setLayout(new FlowLayout());
+		add(train_container, BorderLayout.WEST);
+		
+        scroll = new JScrollPane(trainPanel);
+        scroll.setHorizontalScrollBarPolicy(scroll.HORIZONTAL_SCROLLBAR_ALWAYS);
+        scroll.setPreferredSize(new Dimension(DEFAULT_TRAIN_CONTAINER_WIDTH, DEFAULT_TRAIN_CONTAINER_HEIGHT));
+        train_container.add(scroll, BorderLayout.WEST);
+        
+        
+        // Create status report holder
+		JPanel status_report = new JPanel();
+		status_report.setLayout(new FlowLayout());
+		status_report.setPreferredSize(new Dimension(150, 100));
+		status_report.setBackground(Color.BLUE);
+		
+		// Write the status report 
+		JLabel canMove = new JLabel();
+		canMove.setText("Fill me with text... And a nicer colour");
+		
+		add(status_report, BorderLayout.EAST);
+		
+		
+		
 		createAddLocov2();
 		createAddPass();
 		createAddFreight();
@@ -76,13 +108,13 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 		// Setup trainPanel
 	    trainPanel = new JPanel();
 	    trainPanel.setLayout(new FlowLayout());
-	    add(trainPanel,BorderLayout.WEST);
-
+	    //scroll.add(trainPanel);
+	    //scroll.getViewport().add(comp)
+	    scroll.getViewport().add(trainPanel);
 		RollingStock carriage = myTrain.nextCarriage();
 		
 		while(carriage != null) {
-			System.out.print(carriage.toString() + " -- ");
-			
+	
 			if(carriage.toString().contains("Loco")){ // locomotive carriage
 
 			    spawnStock(carriage.toString(), Color.YELLOW);
@@ -105,7 +137,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 			
 		}
 
-
+		
 		// All additions to trainPanel have been made, show it!
 	    setVisible(true);
 	    repaint();
