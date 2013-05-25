@@ -43,7 +43,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 	private JPanel trainPanel;
 	private JScrollPane scroll;
 	private JFrame locoPanel, passPanel, freightPanel;
-	private JPanel RollingStockPanel, powerPanel;
+	private JPanel RollingStockPanel, status_report;
 	private JLabel stockLabel;
 	private JTextField grossWeight_field,freightGrossWeight_field,numberOfSeats_field;
 	private JComboBox engineList, powerList, goodsList;
@@ -92,7 +92,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 
 	private void drawStatus() throws TrainException {
 		// Create status report holder
-		JPanel status_report = new JPanel();
+		status_report = new JPanel();
 		status_report.setLayout(new FlowLayout());
 		status_report.setPreferredSize(new Dimension(150, 100));
 		status_report.setBackground(Color.GRAY);
@@ -100,7 +100,6 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 		// Add label
 		status_report.add(new Label("Power to weight:"));
 		String canMove = "test";
-		System.out.println("1");
 		if(myTrain.nextCarriage() != null) {
 			if(myTrain.trainCanMove()) {
 				canMove = " good!";

@@ -193,7 +193,8 @@ public class DepartingTrain extends Object {
 			 trainWeight += stockList.get(carPos).getGrossWeight();
 			 
 		 }
-		 
+		 System.out.println("Power: " + trainPower);
+		 System.out.println("Weight: " + trainWeight);
 		 // Can it be pulled by the train?
 		 if(trainPower >= trainWeight) {
 			 return true;
