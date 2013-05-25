@@ -22,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.border.Border;
 
 /**
@@ -42,9 +43,9 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 	private JPanel trainPanel;
 	private JScrollPane scroll;
 	private JFrame locoPanel, passPanel, freightPanel;
-	private JPanel RollingStockPanel;
+	private JPanel RollingStockPanel, powerPanel;
 	private JLabel stockLabel;
-	private JTextField locoPowerText,grossWeight_field,freightGrossWeight_field,numberOfSeats_field;
+	private JTextField grossWeight_field,freightGrossWeight_field,numberOfSeats_field;
 	private JComboBox engineList, powerList, goodsList;
 	private final int DEFAULT_CARRIAGE_WIDTH = 110;
 	private final int DEFAULT_CARRIAGE_HEIGHT = 90;
@@ -78,31 +79,41 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 		add(train_container, BorderLayout.WEST);
 		
         scroll = new JScrollPane(trainPanel);
-        scroll.setHorizontalScrollBarPolicy(scroll.HORIZONTAL_SCROLLBAR_ALWAYS);
+        scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         scroll.setPreferredSize(new Dimension(DEFAULT_TRAIN_CONTAINER_WIDTH, DEFAULT_TRAIN_CONTAINER_HEIGHT));
         train_container.add(scroll, BorderLayout.WEST);
         
-        
-        // Create status report holder
-		JPanel status_report = new JPanel();
-		status_report.setLayout(new FlowLayout());
-		status_report.setPreferredSize(new Dimension(150, 100));
-		status_report.setBackground(Color.BLUE);
-		
-		// Write the status report 
-		JLabel canMove = new JLabel();
-		canMove.setText("Fill me with text... And a nicer colour");
-		
-		add(status_report, BorderLayout.EAST);
-		
-		
-		
-		createAddLocov2();
+        drawStatus();
+		createAddLoco();
 		createAddPass();
 		createAddFreight();
 		drawTrain();
 	}
 
+	private void drawStatus() throws TrainException {
+		// Create status report holder
+		JPanel status_report = new JPanel();
+		status_report.setLayout(new FlowLayout());
+		status_report.setPreferredSize(new Dimension(150, 100));
+		status_report.setBackground(Color.GRAY);
+
+		// Add label
+		status_report.add(new Label("Power to weight:"));
+		String canMove = "test";
+		System.out.println("1");
+		if(myTrain.nextCarriage() != null) {
+			if(myTrain.trainCanMove()) {
+				canMove = " good!";
+				System.out.println(canMove);
+			} else {
+				canMove = " bad!";
+				System.out.println(canMove);
+			}
+		}
+		// Add panel to the train panel
+		status_report.add(new Label(canMove));
+		add(status_report, BorderLayout.EAST);
+	}
 
 	private void drawTrain() throws TrainException {
 		// Setup trainPanel
@@ -136,34 +147,17 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 			carriage = myTrain.nextCarriage();
 			
 		}
-
-		
 		// All additions to trainPanel have been made, show it!
 	    setVisible(true);
 	    repaint();
+	    
+	    drawStatus();
 	}
 
-	
-    private void createAddLoco() {
-	    locoPanel = new JFrame();
-	    locoPowerText = new JTextField();
-	    locoPanel.setLayout(new GridBagLayout());
-		GridBagConstraints constraints = new GridBagConstraints();
-		constraints.fill = GridBagConstraints.NONE;
-		constraints.anchor = GridBagConstraints.CENTER;
-		constraints.weightx = 100;
-		constraints.weighty = 100;
-
-		locoPanel.setSize(300, 500);
-	    locoPanel.setBackground(Color.GRAY);
-	    locoPanel.setVisible(false);
-	}
-
-    
     /**
      * 
      */
-    private void createAddLocov2() {
+    private void createAddLoco() {
     	locoPanel = new JFrame("Add locomotive carriage");
     	//2. Optional: What happens when the frame closes?
     	locoPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -227,14 +221,14 @@ public class GUITest_Ben extends JFrame implements ActionListener {
       	grossWeight_field = new JTextField();
       	grossWeight_field.setColumns( 20 );
 
-      	inputPanel.add(new Label("Gross Weight"));
+      	inputPanel.add(new Label("Gross Weight:"));
       	inputPanel.add(grossWeight_field);           
       	
        	
        	numberOfSeats_field = new JTextField();
        	numberOfSeats_field.setColumns( 20 );
 
-       	inputPanel.add(new Label("Number of seats (in tonnes)"));
+       	inputPanel.add(new Label("Number of seats:"));
        	inputPanel.add(numberOfSeats_field);           
     	
     	// ------------------ //
@@ -273,12 +267,15 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 
     	// -- Create inputs -- //  	
     	//Create the goods type list box
+    	inputPanel.add(new Label("Goods Type:"));
     	String[] goodTypes = { "G", "D", "R" }; // list of engines
     	goodsList = new JComboBox(goodTypes); // listbox element
+
     	inputPanel.add(goodsList); // add it to our input panel
     	
     	
     	// Create the gross weight input box
+    	inputPanel.add(new Label("Gross Weight:"));
     	freightGrossWeight_field = new JTextField();
     	freightGrossWeight_field.setColumns( 20 );
 
@@ -293,7 +290,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
     	
     	//4. Size the frame.
     	freightPanel.pack();
-    	freightPanel.setSize(300,120);
+    	freightPanel.setSize(300,200);
 
     	btmPanel = new JPanel();
     	btmPanel.setBackground(Color.LIGHT_GRAY);
