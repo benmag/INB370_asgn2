@@ -131,7 +131,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 			
 			//HALP
 			//WORKS WITHOUT THIS (textbox doesn't update) BUT BREAKS WHOLE THING WITH THIS?!
-			if(myTrain.nextCarriage() != null) {
+			if(carriage != null) {
 				if(myTrain.trainCanMove()) {
 					status_report.setText("Can move: Yes!");
 				} else {
