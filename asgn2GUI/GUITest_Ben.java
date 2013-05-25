@@ -157,7 +157,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 	private void createAddLoco() {
     	locoPanel = new JFrame("Add locomotive carriage");
     	//2. Optional: What happens when the frame closes?
-    	locoPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	locoPanel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     	
     	// Create input panel
     	JPanel inputPanel = new JPanel();
@@ -222,7 +222,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
     private void createAddPass() {
     	passPanel = new JFrame("Add Passenger Carriage");
     	//2. Optional: What happens when the frame closes?
-    	passPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	passPanel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     	
     	// Create input panel
     	JPanel inputPanel = new JPanel();
@@ -270,7 +270,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
     private void createAddFreight() {
     	freightPanel = new JFrame("Add freight carriage");
     	//2. Optional: What happens when the frame closes?
-    	freightPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	freightPanel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     	
     	// Create input panel
     	JPanel inputPanel = new JPanel();
@@ -321,7 +321,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
     private void createBoardPassengers() {
     	boardPanel = new JFrame("Board Passengers");
     	//2. Optional: What happens when the frame closes?
-    	boardPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	boardPanel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     	
     	// Create input panel
     	JPanel inputPanel = new JPanel();
