@@ -22,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.Border;
 
@@ -40,7 +41,8 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 	private JPanel trainPanel;
 	private JScrollPane scroll;
 	private JFrame locoPanel, passPanel, freightPanel;
-	private JPanel RollingStockPanel, status_report;
+	private JPanel RollingStockPanel;
+	JTextPane status_report;
 	private JLabel stockLabel;
 	private JTextField grossWeight_field,freightGrossWeight_field,numberOfSeats_field,power_field;
 	private JComboBox engineList, powerList, goodsList;
@@ -81,15 +83,15 @@ public class GUITest_Ben extends JFrame implements ActionListener {
         train_container.add(scroll, BorderLayout.WEST);
         
         // Create status report holder
-        status_report = new JPanel();
-        status_report.setLayout(new FlowLayout());
+        status_report = new JTextPane();
+        //status_report.setLayout(new FlowLayout());
         status_report.setPreferredSize(new Dimension(150, 100));
-        status_report.setBackground(Color.GRAY);
-        status_report.add(new Label("Can move:"));
-        power_field = new JTextField();
-      	power_field.setColumns( 10 );
-      	power_field.setEditable(false);
-      	status_report.add(power_field);
+        //status_report.setBackground(Color.GRAY);
+        //status_report.add(new Label("Can move:"));
+        //power_field = new JTextField();
+      	//power_field.setColumns( 10 );
+      	//power_field.setEditable(false);
+      	//status_report.add(power_field);
         add(status_report, BorderLayout.EAST);
         
 
@@ -98,30 +100,6 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 		createAddPass();
 		createAddFreight();
 		drawTrain();
-	}
-
-	private void drawStatus() throws TrainException {
-		// Create status report holder
-		status_report = new JPanel();
-		status_report.setLayout(new FlowLayout());
-		status_report.setPreferredSize(new Dimension(150, 100));
-		status_report.setBackground(Color.GRAY);
-
-		// Add label
-		status_report.add(new Label("Power to weight:"));
-		String canMove = "test";
-		if(myTrain.nextCarriage() != null) {
-			if(myTrain.trainCanMove()) {
-				canMove = " good!";
-				System.out.println(canMove);
-			} else {
-				canMove = " bad!";
-				System.out.println(canMove);
-			}
-		}
-		// Add panel to the train panel
-		status_report.add(new Label(canMove));
-		add(status_report, BorderLayout.EAST);
 	}
 
 	private void drawTrain() throws TrainException {
@@ -153,13 +131,13 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 			
 			//HALP
 			//WORKS WITHOUT THIS (textbox doesn't update) BUT BREAKS WHOLE THING WITH THIS?!
-			/*if(myTrain.nextCarriage() != null) {
+			if(myTrain.nextCarriage() != null) {
 				if(myTrain.trainCanMove()) {
-					power_field.setText("Yes!");
+					status_report.setText("Can move: Yes!");
 				} else {
-					power_field.setText("No!");
+					status_report.setText("Can move: No!");
 				}
-			}*/
+			}
 
 			// Get the next carriage
 			carriage = myTrain.nextCarriage();
