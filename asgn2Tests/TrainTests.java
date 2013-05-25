@@ -382,7 +382,7 @@ public class TrainTests {
 	public void testTrainCanMove() throws TrainException {
 		
 		DepartingTrain myTrain = new DepartingTrain();
-		Locomotive loco = new Locomotive(defaultWeight, defaultClassification);
+		Locomotive loco = new Locomotive(defaultWeight, defaultClassification); //400 power
 				
 		PassengerCar pass1 = new PassengerCar(defaultWeight, defaultSeats);
 		FreightCar freight1 = new FreightCar(defaultWeight, defaultGoods);		

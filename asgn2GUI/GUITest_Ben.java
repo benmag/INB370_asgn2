@@ -31,23 +31,24 @@ import javax.swing.ScrollPaneConstants;
 public class GUITest_Ben extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = -7031008862559936404L;
-	public static final int WIDTH = 600;
+	public static final int WIDTH = 800;
 	public static final int HEIGHT = 250;
 
 	private JPanel btmPanel;
 	private Canvas drawPanel;
 	private JPanel trainPanel;
 	private JScrollPane scroll;
-	private JFrame locoPanel, passPanel, freightPanel;
+	private JFrame locoPanel, passPanel, freightPanel, boardPanel;
 	private JPanel RollingStockPanel;
 	JTextPane status_report;
 	private JLabel stockLabel;
-	private JTextField grossWeight_field,freightGrossWeight_field,numberOfSeats_field,locoGrossWeight_field;
+	private JTextField grossWeight_field,freightGrossWeight_field,numberOfSeats_field,locoGrossWeight_field,boardPassengers_field;
 	private JComboBox engineList, powerList, goodsList;
 	private final int DEFAULT_CARRIAGE_WIDTH = 110;
 	private final int DEFAULT_CARRIAGE_HEIGHT = 90;
-	private final int DEFAULT_TRAIN_CONTAINER_WIDTH = 400;
+	private final int DEFAULT_TRAIN_CONTAINER_WIDTH = 610;
 	private final int DEFAULT_TRAIN_CONTAINER_HEIGHT = 150;
+	private int leftOverPassengers;
 	
 	
 	// TRAIN 
@@ -68,7 +69,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 		super(arg0);
 		createGUI();
 		
-		setPreferredSize(new Dimension(200, 250));
+		setPreferredSize(new Dimension(300, 250));
         
 		// Create a new JPanel to hold the train scroll
 		JPanel train_container = new JPanel();
@@ -90,6 +91,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 		createAddLoco();
 		createAddPass();
 		createAddFreight();
+		createBoardPassengers();
 		drawTrain();
 	}
 
@@ -134,6 +136,9 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 				trainStatus += "No.";
 			} else {
 				trainStatus += "Yes.";
+			}
+			if(leftOverPassengers > 0) {
+				trainStatus += "\nStranded passengers: " + leftOverPassengers;
 			}
 			status_report.setText(trainStatus);
 			// Get the next carriage
@@ -313,6 +318,47 @@ public class GUITest_Ben extends JFrame implements ActionListener {
     	freightPanel.setVisible(false);
 	}  
 
+    private void createBoardPassengers() {
+    	boardPanel = new JFrame("Board Passengers");
+    	//2. Optional: What happens when the frame closes?
+    	boardPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	
+    	// Create input panel
+    	JPanel inputPanel = new JPanel();
+    	inputPanel.setLayout(new FlowLayout( FlowLayout.CENTER, 5,5));
+
+    	// -- Create inputs -- //  	
+    	//Create the engine list box
+    	JPanel boardPassengers = new JPanel();
+    	boardPassengers.add(new Label("Board Passengers:"));
+    	boardPassengers_field = new JTextField();
+    	boardPassengers_field.setColumns( 10 );
+      	boardPassengers.add(boardPassengers_field);
+      	inputPanel.add(boardPassengers);
+    	// ----------------- //       
+    	
+    	boardPanel.getContentPane().add(inputPanel, BorderLayout.CENTER);
+
+    	
+    	//4. Size the frame.
+    	boardPanel.pack();
+    	boardPanel.setSize(300,200);
+
+    	btmPanel = new JPanel();
+    	btmPanel.setBackground(Color.LIGHT_GRAY);
+    	btmPanel.setLayout(new FlowLayout());
+
+    	JButton boardButton = new JButton("Board");
+    	boardButton.setBackground(Color.WHITE);
+    	boardButton.addActionListener(this);
+    	btmPanel.add(boardButton);
+
+    	boardPanel.add(btmPanel, BorderLayout.SOUTH);
+
+    	//5. Hide it to be shown when we're ready.
+    	boardPanel.setVisible(false);
+	}  
+    
 	private void spawnStock(String stockText, Color selectedColor) {
 
 		// Create loco panel
@@ -365,6 +411,11 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 	    removeButton.setBackground(Color.WHITE);
 	    removeButton.addActionListener(this);
 	    btmPanel.add(removeButton);
+	    
+	    JButton boardButton = new JButton("Board Passengers");
+	    boardButton.setBackground(Color.WHITE);
+	    boardButton.addActionListener(this);
+	    btmPanel.add(boardButton);
 
 	    
 	    this.getContentPane().add(btmPanel, BorderLayout.SOUTH);
@@ -389,6 +440,8 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+		} else if(buttonString.equals("Board Passengers")) {
+			boardPanel.setVisible(true);
 		} else if(buttonString.equals("Save Locomotive")) {
 			String EngineType = "";
 			// fetch logo info from our input objects
@@ -403,7 +456,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 			this.trainGrossWeight = Integer.parseInt(locoGrossWeight_field.getText());
 			
 			
-			// Create the loco motive carriage
+			// Create the locomotive carriage
 			try {
 				Locomotive locomotive = new Locomotive(this.trainGrossWeight, this.trainClassification);
 				myTrain.addCarriage(locomotive);
@@ -416,7 +469,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 					  
 		  
 	  } else if(buttonString.equals("Save Passenger Carriage")) {
-			// fetch logo info from our input objects
+			// fetch info from our input objects
 			this.grossWeight = Integer.parseInt(grossWeight_field.getText());
 			this.numberOfSeats = Integer.parseInt(numberOfSeats_field.getText());
 			
@@ -427,7 +480,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 				myTrain.addCarriage(pass);
 				
 				
-				// Clear passPanel window
+				// Clear window
 				numberOfSeats_field.setText("");
 				grossWeight_field.setText("");
 				
@@ -440,7 +493,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 					  
 		  
 	  } else if(buttonString.equals("Save Freight Carriage")) {
-			// fetch logo info from our input objects
+			// fetch info from our input objects
 			Integer freight_grossWeight = Integer.parseInt(freightGrossWeight_field.getText());
 			String freight_goods = "";
 			if((String) goodsList.getSelectedItem() == "General Goods") {
@@ -450,20 +503,34 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 			} else if((String) goodsList.getSelectedItem() == "Dangerous Materials") {
 				freight_goods = "D";
 			}
-			
-			
-			
-			
-			// Create the freight carriage
+
+			// Create the carriage
 			try {
 				FreightCar freight = new FreightCar(freight_grossWeight, freight_goods);	
 				myTrain.addCarriage(freight);
 				
 				
-				// Clear passPanel window
+				// Clear window
 				freightGrossWeight_field.setText("");
 				
 				freightPanel.setVisible(false);
+				drawTrain();
+			} catch (TrainException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+				
+	  } else if(buttonString.equals("Board")) {
+			// fetch info from our input objects
+			Integer passengersToBoard = Integer.parseInt(boardPassengers_field.getText());
+
+			// Board the passengers
+			try {
+				leftOverPassengers = myTrain.board(passengersToBoard);
+
+				// Clear window
+				boardPassengers_field.setText("");
+				boardPanel.setVisible(false);
 				drawTrain();
 			} catch (TrainException e1) {
 				// TODO Auto-generated catch block
