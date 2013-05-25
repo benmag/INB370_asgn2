@@ -133,9 +133,9 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 			trainStatus += "\n";
 			trainStatus += "Full: ";
 			if(myTrain.numberOfSeats() > 0) {
-				trainStatus += "No.";
+				trainStatus += "No ["+myTrain.numberOnBoard()+"/"+myTrain.numberOfSeats()+"]";
 			} else {
-				trainStatus += "Yes.";
+				trainStatus += "Yes ["+myTrain.numberOnBoard()+"/"+myTrain.numberOfSeats()+"]";;
 			}
 			if(leftOverPassengers > 0) {
 				trainStatus += "\nStranded passengers: " + leftOverPassengers;
@@ -437,8 +437,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 				myTrain.removeCarriage();
 				drawTrain();
 			} catch (TrainException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				status_report.setText(status_report.getText() + "\n\nError: "+ e1.getMessage());
 			}
 		} else if(buttonString.equals("Board Passengers")) {
 			boardPanel.setVisible(true);
@@ -463,8 +462,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 				locoPanel.setVisible(false);
 				drawTrain();
 			} catch (TrainException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				status_report.setText(status_report.getText() + "\n Error: "+ e1.getMessage());
 			}
 					  
 		  
@@ -487,8 +485,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 				passPanel.setVisible(false);
 				drawTrain();
 			} catch (TrainException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				status_report.setText(status_report.getText() + "\n Error: "+ e1.getMessage());
 			}
 					  
 		  
@@ -516,8 +513,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 				freightPanel.setVisible(false);
 				drawTrain();
 			} catch (TrainException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				status_report.setText(status_report.getText() + "\n Error: "+ e1.getMessage());
 			}
 				
 	  } else if(buttonString.equals("Board")) {
@@ -533,8 +529,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 				boardPanel.setVisible(false);
 				drawTrain();
 			} catch (TrainException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				status_report.setText(status_report.getText() + "\n Error: "+ e1.getMessage());
 			}
 				
 	  } else {
@@ -552,4 +547,5 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 	    gui.setVisible(true);
 
 	}
+	
 }
