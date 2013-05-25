@@ -34,9 +34,6 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 	private static final long serialVersionUID = -7031008862559936404L;
 	public static final int WIDTH = 600;
 	public static final int HEIGHT = 250;
-	
-	
-	private static final int MULTIPLY = 100;
 
 	private JPanel btmPanel;
 	private Canvas drawPanel;
@@ -45,7 +42,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 	private JFrame locoPanel, passPanel, freightPanel;
 	private JPanel RollingStockPanel, status_report;
 	private JLabel stockLabel;
-	private JTextField grossWeight_field,freightGrossWeight_field,numberOfSeats_field;
+	private JTextField grossWeight_field,freightGrossWeight_field,numberOfSeats_field,power_field;
 	private JComboBox engineList, powerList, goodsList;
 	private final int DEFAULT_CARRIAGE_WIDTH = 110;
 	private final int DEFAULT_CARRIAGE_HEIGHT = 90;
@@ -83,7 +80,20 @@ public class GUITest_Ben extends JFrame implements ActionListener {
         scroll.setPreferredSize(new Dimension(DEFAULT_TRAIN_CONTAINER_WIDTH, DEFAULT_TRAIN_CONTAINER_HEIGHT));
         train_container.add(scroll, BorderLayout.WEST);
         
-        drawStatus();
+        // Create status report holder
+        status_report = new JPanel();
+        status_report.setLayout(new FlowLayout());
+        status_report.setPreferredSize(new Dimension(150, 100));
+        status_report.setBackground(Color.GRAY);
+        status_report.add(new Label("Can move:"));
+        power_field = new JTextField();
+      	power_field.setColumns( 10 );
+      	power_field.setEditable(false);
+      	status_report.add(power_field);
+        add(status_report, BorderLayout.EAST);
+        
+
+        
 		createAddLoco();
 		createAddPass();
 		createAddFreight();
@@ -140,7 +150,16 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 			} else {
 				throw new TrainException("Unknown RollingStock type detected in drawTrain()");
 			}
-
+			
+			//HALP
+			//WORKS WITHOUT THIS (textbox doesn't update) BUT BREAKS WHOLE THING WITH THIS?!
+			/*if(myTrain.nextCarriage() != null) {
+				if(myTrain.trainCanMove()) {
+					power_field.setText("Yes!");
+				} else {
+					power_field.setText("No!");
+				}
+			}*/
 
 			// Get the next carriage
 			carriage = myTrain.nextCarriage();
@@ -149,8 +168,6 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 		// All additions to trainPanel have been made, show it!
 	    setVisible(true);
 	    repaint();
-	    
-	    drawStatus();
 	}
 
     /**
@@ -167,7 +184,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 
     	// -- Create inputs -- //  	
     	//Create the engine list box
-    	String[] engineTypes = { "E", "D", "S" }; // list of engines
+    	String[] engineTypes = { "Engine", "Diesel", "Steam" }; // list of engines
     	engineList = new JComboBox(engineTypes); // listbox element
     	inputPanel.add(engineList); // add it to our input panel
     	
@@ -383,10 +400,17 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 				e1.printStackTrace();
 			}
 		} else if(buttonString.equals("Save Locomotive")) {
-		  
+			String EngineType = "";
 			// fetch logo info from our input objects
-			this.trainClassification = (String)(String) powerList.getSelectedItem() + "" + (String) engineList.getSelectedItem(); 
-			this.trainGrossWeight = Integer.parseInt((String) powerList.getSelectedItem()) * MULTIPLY;
+			if((String) engineList.getSelectedItem() == "Engine") {
+				EngineType = "E";
+			} else if((String) engineList.getSelectedItem() == "Diesel") {
+				EngineType = "D";
+			} else if((String) engineList.getSelectedItem() == "Steam") {
+				EngineType = "S";
+			}
+			this.trainClassification = (String)(String) powerList.getSelectedItem() + "" + EngineType; 
+			this.trainGrossWeight = Integer.parseInt((String) powerList.getSelectedItem());
 			
 			
 			// Create the loco motive carriage
