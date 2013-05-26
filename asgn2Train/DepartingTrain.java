@@ -220,15 +220,12 @@ public class DepartingTrain extends Object {
 			if(newCarriage.toString().contains("Loco") && stockList.get(START_POS).toString().contains("Loco")) {
 				// We've already got one locomotive, another cannot be added.
 				throw new TrainException("Invalid train configuration. Cannot addCarriage(). Only one locomotive per train. ");
-			} else if(freightCarriageAdded == true && newCarriage.toString().contains("Passenger")) {
+			} else if(toString().contains("Freight") && newCarriage.toString().contains("Passenger")) {
 				// Can't have people carriages here. Health and Safety regulations are such a drag.
 				throw new TrainException("Invalid train configuration. Cannot addCarriage() for passengers to train after freight carriages have been added."); 
 			} else if(newCarriage.toString().contains("Freight") && numberOnBoard() > EMPTY) {
 				throw new TrainException("Invalid train configuration. You cannot addCarriage() if people are on board");
 			} else {
-				
-				// Track if freight carriage added to train
-				if(newCarriage.toString().contains("Freight")) this.freightCarriageAdded = true;
 				
 				stockList.add(newCarriage);
 			}
