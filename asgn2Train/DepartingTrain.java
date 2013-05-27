@@ -98,10 +98,10 @@ public class DepartingTrain extends Object {
 	 */
 	public Integer numberOnBoard() {
   
-            Integer passengerCount = 0;
+            Integer passengerCount = EMPTY;
             
             // Loop through, identify the passenger cars and count the number of passengers
-            for (int carPos = 0; carPos < stockList.size(); carPos++) {
+            for (int carPos = START_POS; carPos < stockList.size(); carPos++) {
 				if(stockList.get(carPos).toString().contains("Passenger")) { // if the car is a
 					
 					// Count the number of passengers
@@ -121,7 +121,7 @@ public class DepartingTrain extends Object {
 	 */
 	public Integer numberOfSeats() {
             
-        Integer seatCount = 0;
+        Integer seatCount = EMPTY;
         
         // Loop through, identify the passenger cars and count the number of passengers
         for (int carPos = 0; carPos < stockList.size(); carPos++) {
@@ -149,7 +149,7 @@ public class DepartingTrain extends Object {
 		Integer dontFit = newPassengers;
 		Integer passengersWaiting = newPassengers;
 		// Loop through, find all passenger carriages 
-        for (int carPos = 0; carPos < stockList.size(); carPos++) {
+        for (int carPos = START_POS; carPos < stockList.size(); carPos++) {
         	
         	// Add as many passengers into each passenger carriage 
 			if(stockList.get(carPos).toString().contains("Passenger")) { // if the car is a
@@ -185,10 +185,10 @@ public class DepartingTrain extends Object {
 	public boolean trainCanMove() {
 		
 		Integer trainPower = ((Locomotive) stockList.get(LOCOPOS)).power();
-		Integer trainWeight = 0;
+		Integer trainWeight = EMPTY;
 		
 		// Loop through and generate the total weight of the train
-		 for (int carPos = 0; carPos < stockList.size(); carPos++) {
+		 for (int carPos = START_POS; carPos < stockList.size(); carPos++) {
 		      
 			 trainWeight += stockList.get(carPos).getGrossWeight();
 			 
@@ -285,7 +285,7 @@ public class DepartingTrain extends Object {
 				"'U'0 0  0 0  0 0  0 0    \n");*/
 				
 		// Loop through and append carriage info to train 
-		for (int carPos = 0; carPos < stockList.size(); carPos++) {
+		for (int carPos = START_POS; carPos < stockList.size(); carPos++) {
 		      
 			 
 			 // Build carriage
@@ -308,16 +308,6 @@ public class DepartingTrain extends Object {
 				 line3 = line3 + "     00    00    00  ";
 				 
 			 }
-			 
-			 /*   \/         \/
-			  * |~~~~ TRAIN ~~~~|
-			  * |     Loco(x)   |
-			  * |=> 400 tonnes  |
-			  * |---------------|
-			  * | Passenger(x/y)|
-			  * |---------------|
-			  * |   Freight(x)  |
-			  */
 			 
 		 }
 		 

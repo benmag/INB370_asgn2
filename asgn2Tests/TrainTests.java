@@ -16,12 +16,6 @@ import static org.junit.Assert.*;
 
 public class TrainTests {
 
-	/*
-	 * TEST LIST
-	 * firstCarriage() - Returns the first train
-	 * firstCarriage() - Returns null if there are no carriages
-	 * firstCarriage() - Must be a locomotive
-	 */
 	private Integer everyoneFoundASeat = 0; 
 	private Integer defaultWeight = 50;
 	private Integer defaultTooHeavyWeight = 500000;
@@ -33,6 +27,7 @@ public class TrainTests {
     @SuppressWarnings("unused")
 	private String invalidGoods = "K";
     private String defaultClassification = "4S";
+    private Integer invalidSeats = -10;
     
     /*
      * Test to see if firstCarriage() returns null when there aren't any carriages
@@ -318,6 +313,29 @@ public class TrainTests {
 	}
 	
 	
+	
+	/*
+	 * Test to see if board() throws exception when negative number of passengers is given 
+	 * 
+	 * @throws TrainException - if the number of new passengers is negative
+	 * @result An expected exception
+	 */	
+	@Test (expected = TrainException.class)
+	public void testBoardNegativeException() throws TrainException {
+		
+		
+		DepartingTrain myTrain = new DepartingTrain();
+		Locomotive loco = new Locomotive(defaultWeight, defaultClassification);
+				
+		PassengerCar pass1 = new PassengerCar(defaultWeight, defaultSeats);
+		
+		myTrain.addCarriage(loco);
+		myTrain.addCarriage(pass1);
+		
+		myTrain.board(invalidSeats);
+		
+		
+	}
 	
 	/*
 	 * Test to see that the board() method works. Should return the number of people that couldn't board
