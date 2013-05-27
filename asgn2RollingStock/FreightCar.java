@@ -38,7 +38,7 @@ public class FreightCar extends RollingStock {
     }
 	
     
-    /* 
+    /** 
      * Returns the type of goods this carriage was designed to carry. 
      * (Simulates someone checking the label on the freight car to 
      * determine what's inside.)
@@ -50,9 +50,10 @@ public class FreightCar extends RollingStock {
     }
     
     
-    /* 
-     * Returns a human-readable description of the freight car. This has the form "Freight(x)" where x is a character ("G", "R" or "D") indicating the type of goods the car is designed to carry.
-     * 
+    /**
+     * Returns a human-readable description of the freight car. 
+     * This has the form "Freight(x)" where x is a character ("G", "R" or "D") 
+     * indicating the type of goods the car is designed to carry.
      * @returns a human-readable description of the freight car
      */
     public String toString() {

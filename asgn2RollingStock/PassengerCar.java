@@ -15,6 +15,9 @@ public class PassengerCar extends RollingStock{
 	private Integer numOfSeats = 0;
 	
 	/**
+	 * The default constructor of the passenger car - passes the weight to the super constructor
+	 * (rollingstock). Validates the number of seats before passing it to the local variable.
+	 * Throws a train exception is the number of seats is negative.
 	 * @throws TrainException 
 	 * 
 	 */
@@ -22,15 +25,21 @@ public class PassengerCar extends RollingStock{
 		super(grossWeight);
 		
 		// Valid number of seats provided 
-		if(numberOfSeats > 0) {
+		if(numberOfSeats >= 0) {
 			this.numOfSeats = numberOfSeats; // record no. of seats
 		} else {
 			// Can't seat count less than 0. 
-			throw new TrainException("Invalid number of seats. Must be positive. Cannot construct PassengerCar()");
+			throw new TrainException("Invalid number of seats. Must be positive.");
 		}
 		
 	}
 	
+	/**
+	 * Removes the specified number of departing passengers from the number
+	 * of passengers on board. 
+	 * @param departingPassengers
+	 * @throws TrainException
+	 */
 	public void alight(Integer departingPassengers) throws TrainException {
 		if(departingPassengers < 0 || departingPassengers > numOfPassengers) {
 			throw new TrainException("Invalid number of departing passengers.");
