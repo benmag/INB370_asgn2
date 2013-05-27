@@ -463,6 +463,60 @@ public class TrainTests {
 	}
 	
 	
+	
+	/*
+	 * Test removeCarriage throws exception when there's no rollingstock on the train
+	 * 
+	 * @throws TrainException - no rolling stock on train
+	 * @result An expected exception
+	 */	
+	@Test (expected = TrainException.class)
+	public void testRemoveCarriageEmptyTrain() throws TrainException {
+		
+		
+		DepartingTrain myTrain = new DepartingTrain();
+		myTrain.removeCarriage();
+		
+		
+	}
+	
+	
+	
+	
+	/*
+	 * Test to see if shunting operations can be performed when there are passengers on board
+	 * 
+	 * @throws TrainException -  no carriage shunting operations may be performed when any passengers are on board the train.
+	 * @result An expected exception
+	 */	
+	@Test (expected = TrainException.class)
+	public void testShuntWithPassengersOnBoard() throws TrainException {
+		
+		DepartingTrain myTrain = new DepartingTrain();
+		Locomotive loco = new Locomotive(defaultWeight, defaultClassification);
+		
+		
+		PassengerCar pass1 = new PassengerCar(defaultTooHeavyWeight, defaultSeats);
+		FreightCar freight1 = new FreightCar(defaultWeight, defaultGoods);		
+		FreightCar freight2 = new FreightCar(defaultWeight, defaultGoods);		
+		
+		
+
+		
+		myTrain.addCarriage(loco);
+		myTrain.addCarriage(pass1);
+		myTrain.addCarriage(freight1);
+		myTrain.addCarriage(freight2);
+		
+		myTrain.board(defaultPassengers);
+		
+		myTrain.removeCarriage();
+		
+		
+		
+	}
+	
+	
 	/*
 	 * Test to see if the code recongizes that the train can't move due to the weight
 	 * 
