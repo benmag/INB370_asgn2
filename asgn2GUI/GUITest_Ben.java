@@ -44,6 +44,12 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 	private JLabel stockLabel;
 	private JTextField grossWeight_field,freightGrossWeight_field,numberOfSeats_field,locoGrossWeight_field,boardPassengers_field;
 	private JComboBox engineList, powerList, goodsList;
+	private final int STATUS_REPORT_WIDTH = 150;
+	private final int STATUS_REPORT_HEIGHT= 100;
+	private final int INPUT_PANEL_POS = 5;
+	private final int COLUMN_COUNT = 12;
+	private final int DEFAULT_POP_PANEL_WIDTH = 300;
+	private final int DEFAULT_POP_PANEL_HEIGHT = 200;
 	private final int DEFAULT_CARRIAGE_WIDTH = 110;
 	private final int DEFAULT_CARRIAGE_HEIGHT = 90;
 	private final int DEFAULT_TRAIN_CONTAINER_WIDTH = 610;
@@ -61,6 +67,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 	private Integer numberOfSeats;
 	
 	/**
+	 * Creates our new window 
 	 * @param arg0
 	 * @throws HeadlessException
 	 * @throws TrainException
@@ -69,7 +76,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 		super(arg0);
 		createGUI();
 		
-		setPreferredSize(new Dimension(300, 250));
+		setPreferredSize(new Dimension(WIDTH, HEIGHT));
         
 		// Create a new JPanel to hold the train scroll
 		JPanel train_container = new JPanel();
@@ -83,7 +90,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
         
         // Create status report holder
         status_report = new JTextPane();
-        status_report.setPreferredSize(new Dimension(150, 100));
+        status_report.setPreferredSize(new Dimension(STATUS_REPORT_WIDTH, STATUS_REPORT_HEIGHT));
         add(status_report, BorderLayout.EAST);
         
 
@@ -95,12 +102,29 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 		drawTrain();
 	}
 
+	
+	/* 
+	 * Sets a few configurations for the GUI 
+	 */
+	private void createGUI() {
+		setSize(WIDTH, HEIGHT);
+	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    setLayout(new BorderLayout());
+
+	    createControlPanel();
+	}
+	
+	
+	/* 
+	 * This method loops through all of the carriages on the train and then
+	 * draws a "train" into the GUI and updates the `status report` (which is read
+	 * by conductors etc)  
+	 */
 	private void drawTrain() throws TrainException {
 		// Setup trainPanel
 	    trainPanel = new JPanel();
 	    trainPanel.setLayout(new FlowLayout());
-	    //scroll.add(trainPanel);
-	    //scroll.getViewport().add(comp)
+	    
 	    scroll.getViewport().add(trainPanel);
 		RollingStock carriage = myTrain.nextCarriage();
 		
@@ -114,11 +138,11 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 
 				spawnStock(carriage.toString(), Color.RED);
 
-			} else if(carriage.toString().contains("Freight")) {
+			} else if(carriage.toString().contains("Freight")) { // freight carriage
 
 				spawnStock(carriage.toString(), Color.GREEN);
 
-			} else {
+			} else { // this shouldn't ever happen, but catch it if it does
 				throw new TrainException("Unknown RollingStock type detected in drawTrain()");
 			}
 			
@@ -150,10 +174,14 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 	    repaint();
 	}
 
+	
     /**
+     * The 'Add locomotive' GUI pop up window. Builds a window with 3 input fields:
+     *  engine type (dropdown), power class (drop down) and weight (input)
+     * 
+     * Adds action listener on save button 
      * 
      */
-    @SuppressWarnings("unchecked")
 	private void createAddLoco() {
     	locoPanel = new JFrame("Add locomotive carriage");
     	//2. Optional: What happens when the frame closes?
@@ -161,7 +189,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
     	
     	// Create input panel
     	JPanel inputPanel = new JPanel();
-    	inputPanel.setLayout(new FlowLayout( FlowLayout.CENTER, 5,5));
+    	inputPanel.setLayout(new FlowLayout( FlowLayout.CENTER, INPUT_PANEL_POS, INPUT_PANEL_POS));
 
     	// -- Create inputs -- //  	
     	//Create the engine list box
@@ -182,28 +210,23 @@ public class GUITest_Ben extends JFrame implements ActionListener {
     	
     	//Create the weight input
     	locoGrossWeight_field = new JTextField();
-    	locoGrossWeight_field.setColumns(10);
+    	locoGrossWeight_field.setColumns(COLUMN_COUNT);
 
       	JPanel engineWeight = new JPanel(); 
       	engineWeight.add(new Label("Gross Weight:"));
       	engineWeight.add(locoGrossWeight_field);    
       	inputPanel.add(engineWeight);
     	// ----------------- //
-    	
-    	
-    	/* DONT NEED THIS
-    	JTextField tf = new JTextField();
-       	tf.setColumns( 20 );
-
-       	inputPanel.add(tf);*/           
+    	       
     	
     	locoPanel.getContentPane().add(inputPanel, BorderLayout.CENTER);
 
     	
-    	//4. Size the frame.
+    	// Size the frame.
     	locoPanel.pack();
-    	locoPanel.setSize(300,200);
+    	locoPanel.setSize(DEFAULT_POP_PANEL_WIDTH,DEFAULT_POP_PANEL_HEIGHT);
 
+    	// Create the bottom 'save' panel
     	btmPanel = new JPanel();
     	btmPanel.setBackground(Color.LIGHT_GRAY);
     	btmPanel.setLayout(new FlowLayout());
@@ -215,41 +238,47 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 
     	locoPanel.add(btmPanel, BorderLayout.SOUTH);
 
-    	//5. Hide it to be shown when we're ready.
+    	// Hide it to be shown when we're ready.
     	locoPanel.setVisible(false);
 	}  
     
+	
+    /**
+     * The 'Add Passenger Carriage' GUI pop up window. Builds a window with 2 input fields:
+     *  seats and weight (both inputs) & adds action listener on save button 
+     * 
+     */
     private void createAddPass() {
     	passPanel = new JFrame("Add Passenger Carriage");
-    	//2. Optional: What happens when the frame closes?
     	passPanel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     	
     	// Create input panel
     	JPanel inputPanel = new JPanel();
-    	inputPanel.setLayout(new FlowLayout( FlowLayout.CENTER, 5,5));
+    	inputPanel.setLayout(new FlowLayout( FlowLayout.CENTER, INPUT_PANEL_POS, INPUT_PANEL_POS));
 
     	// -- Create inputs -- //  	  	
       	grossWeight_field = new JTextField();
-      	grossWeight_field.setColumns( 20 );
+      	grossWeight_field.setColumns(COLUMN_COUNT);
 
       	inputPanel.add(new Label("Gross Weight:"));
       	inputPanel.add(grossWeight_field);           
       	
        	
        	numberOfSeats_field = new JTextField();
-       	numberOfSeats_field.setColumns( 20 );
+       	numberOfSeats_field.setColumns(COLUMN_COUNT);
 
        	inputPanel.add(new Label("Number of seats:"));
        	inputPanel.add(numberOfSeats_field);           
-    	
     	// ------------------ //
        	
        	passPanel.getContentPane().add(inputPanel, BorderLayout.CENTER);
     	
-    	//4. Size the frame.
+    	// Size the frame.
     	passPanel.pack();
-    	passPanel.setSize(300,200);
+    	passPanel.setSize(DEFAULT_POP_PANEL_WIDTH,DEFAULT_POP_PANEL_HEIGHT);
 
+    	
+    	// Create bottom 'save' panel
     	btmPanel = new JPanel();
     	btmPanel.setBackground(Color.LIGHT_GRAY);
     	btmPanel.setLayout(new FlowLayout());
@@ -261,20 +290,23 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 
     	passPanel.add(btmPanel, BorderLayout.SOUTH);
 
-    	//5. Hide it to be shown when we're ready.
+    	// Hide it to be shown when we're ready.
     	passPanel.setVisible(false);
 	}
     
     
-    
+    /**
+     * The 'Add Freight Carriage' GUI pop up window. Builds a window with 2 input fields:
+     * goods type (dropdown) and weight (input) also adds action listener on save button 
+     * 
+     */
     private void createAddFreight() {
     	freightPanel = new JFrame("Add freight carriage");
-    	//2. Optional: What happens when the frame closes?
     	freightPanel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     	
     	// Create input panel
     	JPanel inputPanel = new JPanel();
-    	inputPanel.setLayout(new FlowLayout( FlowLayout.CENTER, 5,5));
+    	inputPanel.setLayout(new FlowLayout( FlowLayout.CENTER, INPUT_PANEL_POS, INPUT_PANEL_POS));
 
     	// -- Create inputs -- //  	
     	//Create the goods type list box
@@ -288,7 +320,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
     	// Create the gross weight input box
     	inputPanel.add(new Label("Gross Weight:"));
     	freightGrossWeight_field = new JTextField();
-    	freightGrossWeight_field.setColumns( 20 );
+    	freightGrossWeight_field.setColumns(COLUMN_COUNT);
 
        	inputPanel.add(freightGrossWeight_field);           
 
@@ -299,10 +331,12 @@ public class GUITest_Ben extends JFrame implements ActionListener {
     	freightPanel.getContentPane().add(inputPanel, BorderLayout.CENTER);
 
     	
-    	//4. Size the frame.
+    	// Size the frame.
     	freightPanel.pack();
-    	freightPanel.setSize(300,200);
+    	freightPanel.setSize(DEFAULT_POP_PANEL_WIDTH,DEFAULT_POP_PANEL_HEIGHT);
 
+    	
+    	// Save panel 
     	btmPanel = new JPanel();
     	btmPanel.setBackground(Color.LIGHT_GRAY);
     	btmPanel.setLayout(new FlowLayout());
@@ -314,7 +348,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 
     	freightPanel.add(btmPanel, BorderLayout.SOUTH);
 
-    	//5. Hide it to be shown when we're ready.
+    	// Hide it to be shown when we're ready.
     	freightPanel.setVisible(false);
 	}  
 
@@ -325,14 +359,14 @@ public class GUITest_Ben extends JFrame implements ActionListener {
     	
     	// Create input panel
     	JPanel inputPanel = new JPanel();
-    	inputPanel.setLayout(new FlowLayout( FlowLayout.CENTER, 5,5));
+    	inputPanel.setLayout(new FlowLayout( FlowLayout.CENTER, INPUT_PANEL_POS, INPUT_PANEL_POS));
 
     	// -- Create inputs -- //  	
     	//Create the engine list box
     	JPanel boardPassengers = new JPanel();
     	boardPassengers.add(new Label("Board Passengers:"));
     	boardPassengers_field = new JTextField();
-    	boardPassengers_field.setColumns( 10 );
+    	boardPassengers_field.setColumns(COLUMN_COUNT);
       	boardPassengers.add(boardPassengers_field);
       	inputPanel.add(boardPassengers);
     	// ----------------- //       
@@ -342,7 +376,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
     	
     	//4. Size the frame.
     	boardPanel.pack();
-    	boardPanel.setSize(300,200);
+    	boardPanel.setSize(DEFAULT_POP_PANEL_WIDTH,DEFAULT_POP_PANEL_HEIGHT);
 
     	btmPanel = new JPanel();
     	btmPanel.setBackground(Color.LIGHT_GRAY);
@@ -373,17 +407,6 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 
 	    // Add panel to the train panel
 	    trainPanel.add(RollingStockPanel);
-	}
-
-
-	private void createGUI() {
-		setSize(WIDTH, HEIGHT);
-	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    setLayout(new BorderLayout());
-
-
-
-	    createControlPanel();
 	}
 
 	private void createControlPanel() {
