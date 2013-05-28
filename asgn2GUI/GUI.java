@@ -167,6 +167,8 @@ public class GUI extends JFrame implements ActionListener {
 			} else {
 				trainStatus = "Can move: No!";
 			}
+		} else {
+			trainStatus = "Can move: No!";
 		}
 		trainStatus += "\n";
 		trainStatus += "Full: ";
