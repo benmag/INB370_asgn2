@@ -16,6 +16,7 @@ import static org.junit.Assert.*;
 
 public class TrainTests {
 
+	private Integer EMPTY = 0;
 	private Integer everyoneFoundASeat = 0; 
 	private Integer defaultWeight = 50;
 	private Integer defaultTooHeavyWeight = 500000;
@@ -29,6 +30,87 @@ public class TrainTests {
     private String defaultClassification = "4S";
     private Integer invalidSeats = -10;
     
+    
+	/*
+	 * Create valid locomotive 
+	 * 
+	 * @result no exception thrown, locomotive added to train
+	 */
+	@Test 
+	public void testAddValidLocomotive() throws TrainException {
+		
+		DepartingTrain myTrain = new DepartingTrain();
+    	Locomotive loco1 = new Locomotive(defaultWeight, defaultClassification);
+    	
+		myTrain.addCarriage(loco1);
+		
+		assertEquals(myTrain.nextCarriage(), loco1);
+		
+	}
+	
+	
+	/*
+	 * Create valid locomotive and freight 
+	 * 
+	 * @result no exception thrown, locomotive and freight added to train, returned in right order
+	 */
+	@Test 
+	public void testAddValidLocomotiveAndFreight() throws TrainException {
+		
+		DepartingTrain myTrain = new DepartingTrain();
+    	Locomotive loco1 = new Locomotive(defaultWeight, defaultClassification);
+		myTrain.addCarriage(loco1);
+		
+		FreightCar freight1 = new FreightCar(defaultWeight, defaultGoods);
+		myTrain.addCarriage(freight1);
+		
+		assertEquals(myTrain.nextCarriage(), loco1);
+		assertEquals(myTrain.nextCarriage(), freight1);
+		
+	}
+	
+
+	
+	/*
+	 * Create valid locomotive and passenger carriage 
+	 * 
+	 * @result no exception thrown, locomotive and passenger carriage added to train, returned in right order
+	 */
+	@Test 
+	public void testAddValidLocomotiveAndPassenger() throws TrainException {
+		
+		DepartingTrain myTrain = new DepartingTrain();
+    	Locomotive loco1 = new Locomotive(defaultWeight, defaultClassification);
+		myTrain.addCarriage(loco1);
+		
+		PassengerCar pass1 = new PassengerCar(defaultWeight, defaultSeats);
+		myTrain.addCarriage(pass1);
+		
+		assertEquals(myTrain.nextCarriage(), loco1);
+		assertEquals(myTrain.nextCarriage(), pass1);
+		
+	}
+	
+	
+	/*
+	 * Test to see if add passenger carriage throws exception when you provide 0 for weight and seats
+	 * 
+	 * @throws TrainException
+	 * @result no carriage added, expected exception thrown
+	 */
+	@Test (expected = TrainException.class)
+	public void testAddEmptyPassengerCarriage() throws TrainException {
+		
+		DepartingTrain myTrain = new DepartingTrain();
+    	Locomotive loco1 = new Locomotive(defaultWeight, defaultClassification);
+    	PassengerCar pass1 = new PassengerCar(EMPTY, EMPTY);
+    	
+    	myTrain.addCarriage(loco1);
+		myTrain.addCarriage(pass1);
+		
+	}
+	
+	
     /*
      * Test to see if firstCarriage() returns null when there aren't any carriages
      * 
@@ -54,8 +136,7 @@ public class TrainTests {
     	
 		myTrain.addCarriage(loco1);
 		
-	}
-	
+	}	
 	
 	/*
 	 * Test to see if addCarriage() catches error when invalid first carriage added (not locomotive) 
