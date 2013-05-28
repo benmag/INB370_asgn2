@@ -22,12 +22,13 @@ public class TrainTests {
 	private Integer defaultTooHeavyWeight = 500000;
 	private Integer defaultSeats = 50;
 	private Integer defaultPassengers = 42;
-    @SuppressWarnings("unused")
 	private Integer invalidWeight = -100;
     private String defaultGoods = "G";
     @SuppressWarnings("unused")
 	private String invalidGoods = "K";
+    private Integer exactlyFull = 350;
     private String defaultClassification = "4S";
+    private String invalidLocoClassification = "11S";
     private Integer invalidSeats = -10;
     
     
@@ -39,10 +40,11 @@ public class TrainTests {
 	@Test 
 	public void testAddValidLocomotive() throws TrainException {
 		
+		// Create new train 
 		DepartingTrain myTrain = new DepartingTrain();
     	Locomotive loco1 = new Locomotive(defaultWeight, defaultClassification);
     	
-		myTrain.addCarriage(loco1);
+		myTrain.addCarriage(loco1); // add the carriage to train
 		
 		assertEquals(myTrain.nextCarriage(), loco1);
 		
@@ -57,10 +59,15 @@ public class TrainTests {
 	@Test 
 	public void testAddValidLocomotiveAndFreight() throws TrainException {
 		
+		// Create new train
 		DepartingTrain myTrain = new DepartingTrain();
+		
+		// Add loco carriage
     	Locomotive loco1 = new Locomotive(defaultWeight, defaultClassification);
 		myTrain.addCarriage(loco1);
 		
+		
+		// Add freight carriage
 		FreightCar freight1 = new FreightCar(defaultWeight, defaultGoods);
 		myTrain.addCarriage(freight1);
 		
@@ -79,16 +86,106 @@ public class TrainTests {
 	@Test 
 	public void testAddValidLocomotiveAndPassenger() throws TrainException {
 		
+		// Create train
 		DepartingTrain myTrain = new DepartingTrain();
+		
+		// Add loco
     	Locomotive loco1 = new Locomotive(defaultWeight, defaultClassification);
 		myTrain.addCarriage(loco1);
 		
+		// Add pass
 		PassengerCar pass1 = new PassengerCar(defaultWeight, defaultSeats);
 		myTrain.addCarriage(pass1);
 		
 		assertEquals(myTrain.nextCarriage(), loco1);
 		assertEquals(myTrain.nextCarriage(), pass1);
 		
+	}
+	
+	
+	
+	/*
+	 * Attempt to add a locomotive with invalid power
+	 * 
+	 * @throws TrainException
+	 * @result  expected train exception thrown
+	 */
+	@Test (expected = TrainException.class)
+	public void testAddLocoInvalidClassification() throws TrainException {
+		
+		// New train
+		DepartingTrain myTrain = new DepartingTrain();
+		
+		
+		// Add loco
+		Locomotive loco1 = new Locomotive(defaultWeight, invalidLocoClassification);
+    	myTrain.addCarriage(loco1);
+		
+	}
+	
+	
+	/*
+	 * Attempt to add a locomotive with an invalid weight (negative)
+	 * 
+	 * @throws TrainException
+	 * @result expected train exception thrown
+	 */
+	@Test (expected = TrainException.class)
+	public void testAddLocoInvalidWeight() throws TrainException {
+		
+		// Create train
+		DepartingTrain myTrain = new DepartingTrain();
+		
+		// Loco carriage
+		Locomotive loco1 = new Locomotive(invalidWeight, defaultClassification);
+    	myTrain.addCarriage(loco1);
+		
+	}
+	
+	
+	
+	/*
+	 * Create a train that is exactly full. Train should not be able to move
+	 * 
+	 * @result trainCanMove returns true
+	 */
+	@Test
+	public void testExactlyFull() throws TrainException {
+		
+		// New train
+		DepartingTrain myTrain = new DepartingTrain();
+		
+		
+		// Add carriages
+		Locomotive loco1 = new Locomotive(defaultWeight, defaultClassification);
+    	myTrain.addCarriage(loco1);
+
+		FreightCar freight = new FreightCar(exactlyFull, defaultGoods);
+    	myTrain.addCarriage(freight);
+    	
+    	assertTrue(myTrain.trainCanMove());
+		
+	}
+	
+	
+	
+	/*
+	 * Create a locomotive, give it more weight than it's power can handle. 
+	 * 
+	 * @result can move is false
+	 */
+	@Test 
+	public void testAddLocoNeedsMorePower() throws TrainException {
+		
+		// New train
+		DepartingTrain myTrain = new DepartingTrain();
+		
+		// Add loco
+		Locomotive loco1 = new Locomotive(defaultTooHeavyWeight, defaultClassification);
+    	myTrain.addCarriage(loco1);
+		
+    	assertFalse(myTrain.trainCanMove());
+    	
 	}
 	
 	
@@ -101,14 +198,19 @@ public class TrainTests {
 	@Test (expected = TrainException.class)
 	public void testAddEmptyPassengerCarriage() throws TrainException {
 		
+		// Add train
 		DepartingTrain myTrain = new DepartingTrain();
-    	Locomotive loco1 = new Locomotive(defaultWeight, defaultClassification);
-    	PassengerCar pass1 = new PassengerCar(EMPTY, EMPTY);
     	
-    	myTrain.addCarriage(loco1);
-		myTrain.addCarriage(pass1);
+		// Add loco
+		Locomotive loco1 = new Locomotive(defaultWeight, defaultClassification);
+		myTrain.addCarriage(loco1);
+		
+		// Add (invalid) passenger car
+		PassengerCar pass1 = new PassengerCar(EMPTY, EMPTY);
+    	myTrain.addCarriage(pass1);
 		
 	}
+	
 	
 	
     /*
@@ -118,7 +220,10 @@ public class TrainTests {
      */
 	@Test
 	 public void testFirstCarriageReturnsNullWhenNoCarriages() throws TrainException {
+		
+		// Make empty train
 		DepartingTrain myTrain = new DepartingTrain();
+		
 		assertEquals(null, myTrain.firstCarriage());
 	}
 	
@@ -131,9 +236,11 @@ public class TrainTests {
 	@Test
 	public void testAddFirstCarriageValid() throws TrainException {
 		
+		// Train
 		DepartingTrain myTrain = new DepartingTrain();
+		
+		// Loco
     	Locomotive loco1 = new Locomotive(defaultWeight, defaultClassification);
-    	
 		myTrain.addCarriage(loco1);
 		
 	}	
@@ -147,9 +254,11 @@ public class TrainTests {
 	@Test (expected = TrainException.class)
 	public void testAddFirstCarriageInvalid() throws TrainException {
 		
+		// Train 
 		DepartingTrain myTrain = new DepartingTrain();
+		
+		// Freight carriage (before a loco is added)
     	FreightCar freight1 = new FreightCar(defaultWeight, defaultGoods);
-    	
 		myTrain.addCarriage(freight1);
 		
 	}
@@ -163,7 +272,10 @@ public class TrainTests {
 	@Test (expected = TrainException.class)
 	public void testAddCarriageTwoLocomotives() throws TrainException {
 		
+		// Setup train 
 		DepartingTrain myTrain = new DepartingTrain();
+		
+		// Add two loco motives
 		Locomotive loco1 = new Locomotive(defaultWeight, defaultClassification);
 		Locomotive loco2 = new Locomotive(defaultWeight, defaultClassification);
 
@@ -204,10 +316,12 @@ public class TrainTests {
 	public void testFirstCarriageIsActualFirstCarriage() throws TrainException {
 		
 		DepartingTrain myTrain = new DepartingTrain();
+		
+		// Add loco 
     	Locomotive loco1 = new Locomotive(defaultWeight, defaultClassification);
-    	
 		myTrain.addCarriage(loco1);
 		
+		// Check firstCarriage returns the same as what we just added
 		assertEquals(myTrain.firstCarriage(), loco1);
 	}
 	
@@ -222,9 +336,9 @@ public class TrainTests {
 	public void testFirstCarriageNotLocomotive() throws TrainException {
 		
 		DepartingTrain myTrain = new DepartingTrain();
-    	FreightCar freight1 = new FreightCar(defaultWeight, defaultGoods);
+    	PassengerCar pass1 = new PassengerCar(defaultWeight, defaultSeats);
     	
-		myTrain.addCarriage(freight1);
+		myTrain.addCarriage(pass1);
 		
 	}
 	
@@ -239,12 +353,16 @@ public class TrainTests {
 	public void testFirstCarriageWithMultipleCarriages() throws TrainException {
 		
 		DepartingTrain myTrain = new DepartingTrain();
+		
+		// Add multiple carriages to train
     	Locomotive loco1 = new Locomotive(defaultWeight, defaultClassification);
     	FreightCar freight1 = new FreightCar(defaultWeight, defaultGoods);
     	
 		myTrain.addCarriage(loco1);
 		myTrain.addCarriage(freight1);
 		
+		
+		// First carriage still returns correct carriage
 		assertEquals(loco1, myTrain.firstCarriage());
 		
 		
@@ -259,6 +377,7 @@ public class TrainTests {
 	@Test
 	public void testNextCarriageWorks() throws TrainException {
 		
+		// Create 3 test carriages
 		DepartingTrain myTrain = new DepartingTrain();
     	Locomotive loco1 = new Locomotive(defaultWeight, defaultClassification);
     	FreightCar freight1 = new FreightCar(defaultWeight, defaultGoods);
@@ -267,10 +386,11 @@ public class TrainTests {
 		myTrain.addCarriage(freight1);
 		myTrain.addCarriage(freight1);
 
+		// Loop through all of them and check that the returned carriage is correct
 		assertEquals(loco1, myTrain.nextCarriage());
 		assertEquals(freight1, myTrain.nextCarriage());
 		assertEquals(freight1, myTrain.nextCarriage());
-		assertEquals(null, myTrain.nextCarriage());
+		assertEquals(null, myTrain.nextCarriage()); // once we fall off the end, it will return null
 		
 	}
 	
@@ -282,6 +402,7 @@ public class TrainTests {
 	@Test
 	public void testNextCarriageWorksTwice() throws TrainException {
 		
+		// Create new train with carriages
 		DepartingTrain myTrain = new DepartingTrain();
     	Locomotive loco1 = new Locomotive(defaultWeight, defaultClassification);
     	FreightCar freight1 = new FreightCar(defaultWeight, defaultGoods);
@@ -290,13 +411,14 @@ public class TrainTests {
 		myTrain.addCarriage(freight1);
 		myTrain.addCarriage(freight1);
 
+		// Go through to the end of the train
 		assertEquals(loco1, myTrain.nextCarriage());
 		assertEquals(freight1, myTrain.nextCarriage());
 		assertEquals(freight1, myTrain.nextCarriage());
 		assertEquals(null, myTrain.nextCarriage());
 		
 		// nextCarriage should now start from the beginning
-		assertEquals(loco1.toString(), myTrain.nextCarriage().toString());
+		assertEquals(loco1, myTrain.nextCarriage());
 		assertEquals(freight1, myTrain.nextCarriage());
 		assertEquals(freight1, myTrain.nextCarriage());
 		
@@ -314,6 +436,8 @@ public class TrainTests {
 	@Test
 	public void testNumberOfPassengersOnboard() throws TrainException {
 		
+		
+		// Create train with passenger carriages
 		DepartingTrain myTrain = new DepartingTrain();
 		Locomotive loco = new Locomotive(defaultWeight, defaultClassification);
 				
@@ -332,6 +456,8 @@ public class TrainTests {
 		myTrain.addCarriage(pass2);
 		myTrain.addCarriage(pass3);
 		
+		
+		// Number of passengers expected
 		Integer expectedPass = defaultPassengers + defaultPassengers + defaultPassengers;
 		
 		assertEquals(expectedPass, myTrain.numberOnBoard());
@@ -347,6 +473,7 @@ public class TrainTests {
 	@Test
 	public void testNumberOfSeatsOnboard() throws TrainException {
 		
+		// Create train
 		DepartingTrain myTrain = new DepartingTrain();
 		Locomotive loco = new Locomotive(defaultWeight, defaultClassification);
 				
@@ -362,6 +489,8 @@ public class TrainTests {
 		myTrain.addCarriage(pass2);
 		myTrain.addCarriage(pass3);
 		
+		
+		// total number of seats on train
 		Integer expectedSeats = defaultSeats + defaultSeats + defaultSeats;
 		
 		assertEquals(expectedSeats, myTrain.numberOfSeats());
@@ -376,19 +505,23 @@ public class TrainTests {
 	 * Test to see that the board() method works. This method takes the total number of passengers wanting to board and progressively adds 
 	 * them into any available seats.  
 	 * 
-	 * @result people board the train
+	 * @result people board the train. Board returns 0 
 	 */
 	@Test
 	public void testBoard() throws TrainException {
 		
+		
+		// Create a train
 		DepartingTrain myTrain = new DepartingTrain();
-		Locomotive loco = new Locomotive(defaultWeight, defaultClassification);
-				
+		
+		// Add carriages
+		Locomotive loco = new Locomotive(defaultWeight, defaultClassification);		
 		PassengerCar pass1 = new PassengerCar(defaultWeight, defaultSeats);
 		
 		myTrain.addCarriage(loco);
 		myTrain.addCarriage(pass1);
 		
+		// Board passengers
 		assertEquals(everyoneFoundASeat, myTrain.board(defaultSeats));
 		
 	}
@@ -599,9 +732,9 @@ public class TrainTests {
 	
 	
 	/*
-	 * Test to see if the code recongizes that the train can't move due to the weight
+	 * Test to see if the toString train works
 	 * 
-	 * @result false 
+	 * @result not null
 	 */
 	@Test
 	public void trainToString() throws TrainException {
@@ -609,6 +742,8 @@ public class TrainTests {
 		DepartingTrain myTrain = new DepartingTrain();
 		Locomotive loco = new Locomotive(defaultWeight, defaultClassification);
 				
+		
+		// Create a couple of carriages of every type
 		PassengerCar pass1 = new PassengerCar(defaultTooHeavyWeight, defaultSeats);
 		FreightCar freight1 = new FreightCar(defaultWeight, defaultGoods);		
 		FreightCar freight2 = new FreightCar(defaultWeight, defaultGoods);		
@@ -616,6 +751,7 @@ public class TrainTests {
 		FreightCar freight4 = new FreightCar(defaultWeight, defaultGoods);		
 
 		
+		// Add them all to the train
 		myTrain.addCarriage(loco);
 		myTrain.addCarriage(pass1);
 		myTrain.addCarriage(freight1);
@@ -623,7 +759,7 @@ public class TrainTests {
 		myTrain.addCarriage(freight3);
 		myTrain.addCarriage(freight4);
 		
-		myTrain.toString();
+		assertNotNull(myTrain.toString());
 	}
 	
 }
