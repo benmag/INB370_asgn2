@@ -179,9 +179,7 @@ public class GUI extends JFrame implements ActionListener {
 		// check for an error 
 		if(error != "") {
 			status_report.setBackground(Color.red);
-		} else {
-			status_report.setBackground(Color.white);
-		}
+		} 
 		
 		
 		
@@ -488,7 +486,7 @@ public class GUI extends JFrame implements ActionListener {
 				myTrain.removeCarriage();
 				drawTrain();
 			} catch (TrainException e1) {
-				status_report.setText(status_report.getText() + "\n\nError: "+ e1.getMessage());
+				trainStatus(e1.getMessage());
 			}
 		} else if(buttonString.equals("Board Passengers")) {
 			boardPanel.setVisible(true);
