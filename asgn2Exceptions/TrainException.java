@@ -16,6 +16,6 @@ public class TrainException extends Exception {
      */
     public TrainException(String message) {
     	super("Train Exception: " + message);
-    	System.out.println("Train Exception: "+message); // REMOVE ME. ONLY HERE FOR TESTING PURPOSES
+    	//System.out.println("Train Exception: "+message); // REMOVE ME. ONLY HERE FOR TESTING PURPOSES
     }
 }
