@@ -56,6 +56,7 @@ public class GUI extends JFrame implements ActionListener {
 	private final int DEFAULT_TRAIN_CONTAINER_WIDTH = 610;
 	private final int DEFAULT_TRAIN_CONTAINER_HEIGHT = 150;
 	private int leftOverPassengers;
+	private RollingStock currentCarriage;
 	
 	
 	// TRAIN 
@@ -146,26 +147,8 @@ public class GUI extends JFrame implements ActionListener {
 			} else { // this shouldn't ever happen, but catch it if it does
 				throw new TrainException("Unknown RollingStock type detected in drawTrain()");
 			}
-			
-			String trainStatus = "";
-			if(carriage != null) {
-				if(myTrain.trainCanMove()) {
-					trainStatus = "Can move: Yes!";
-				} else {
-					trainStatus = "Can move: No!";
-				}
-			}
-			trainStatus += "\n";
-			trainStatus += "Full: ";
-			if(myTrain.numberOfSeats() > 0) {
-				trainStatus += "No ["+myTrain.numberOnBoard()+"/"+myTrain.numberOfSeats()+"]";
-			} else {
-				trainStatus += "Yes ["+myTrain.numberOnBoard()+"/"+myTrain.numberOfSeats()+"]";;
-			}
-			if(leftOverPassengers > 0) {
-				trainStatus += "\nStranded passengers: " + leftOverPassengers;
-			}
-			status_report.setText(trainStatus);
+			currentCarriage = carriage;
+			trainStatus("");
 			// Get the next carriage
 			carriage = myTrain.nextCarriage();
 			
@@ -173,6 +156,31 @@ public class GUI extends JFrame implements ActionListener {
 		// All additions to trainPanel have been made, show it!
 	    setVisible(true);
 	    repaint();
+	}
+	
+	private void trainStatus(String error) {
+		RollingStock carriage = currentCarriage;
+		String trainStatus = "";
+		if(carriage != null) {
+			if(myTrain.trainCanMove()) {
+				trainStatus = "Can move: Yes!";
+			} else {
+				trainStatus = "Can move: No!";
+			}
+		}
+		trainStatus += "\n";
+		trainStatus += "Full: ";
+		int remainingSeats = myTrain.numberOfSeats() - myTrain.numberOnBoard();
+		if(remainingSeats > 0) {
+			trainStatus += "No ["+myTrain.numberOnBoard()+"/"+myTrain.numberOfSeats()+"]";
+		} else {
+			trainStatus += "Yes ["+myTrain.numberOnBoard()+"/"+myTrain.numberOfSeats()+"]";;
+		}
+		if(leftOverPassengers > 0) {
+			trainStatus += "\nStranded passengers: " + leftOverPassengers;
+		}
+		trainStatus += "\n\n" + error;
+		status_report.setText(trainStatus);
 	}
 
 	
@@ -488,7 +496,7 @@ public class GUI extends JFrame implements ActionListener {
 				locoPanel.setVisible(false);
 				drawTrain();
 			} catch (TrainException e1) {
-				status_report.setText(status_report.getText() + "\n Error: "+ e1.getMessage());
+				trainStatus(e1.getMessage());
 			}
 					  
 		  
@@ -511,7 +519,7 @@ public class GUI extends JFrame implements ActionListener {
 				passPanel.setVisible(false);
 				drawTrain();
 			} catch (TrainException e1) {
-				status_report.setText(status_report.getText() + "\n Error: "+ e1.getMessage());
+				trainStatus(e1.getMessage());
 			}
 					  
 		  
@@ -539,7 +547,7 @@ public class GUI extends JFrame implements ActionListener {
 				freightPanel.setVisible(false);
 				drawTrain();
 			} catch (TrainException e1) {
-				status_report.setText(status_report.getText() + "\n Error: "+ e1.getMessage());
+				trainStatus(e1.getMessage());
 			}
 				
 	  } else if(buttonString.equals("Board")) {
@@ -555,7 +563,7 @@ public class GUI extends JFrame implements ActionListener {
 				boardPanel.setVisible(false);
 				drawTrain();
 			} catch (TrainException e1) {
-				status_report.setText(status_report.getText() + "\n Error: "+ e1.getMessage());
+				trainStatus(e1.getMessage());
 			}
 				
 	  } else {
