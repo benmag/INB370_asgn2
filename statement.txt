@@ -1,0 +1,15 @@
+
+Names:
+
+Corey Thompson - n8383243	
+Ben Maggacis - n8616574
+
+Corey:
+I did the Rolling Stock classes and helped contribute to the GUI class.
+
+Ben: 
+I did the Departing Train class and worked on the GUI 
+
+We did NOT use a GUI editor. 
+
+I, Corey Thompson, and I, Ben Maggacis, agree to this summary. 
