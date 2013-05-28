@@ -25,17 +25,17 @@ import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
 
 /**
- * @author hogan
+ * @author Ben Maggacis, Corey Thompson (n8383243)
+ * 
  *
  */
-public class GUITest_Ben extends JFrame implements ActionListener {
+public class GUI extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = -7031008862559936404L;
 	public static final int WIDTH = 800;
 	public static final int HEIGHT = 250;
 
 	private JPanel btmPanel;
-	private Canvas drawPanel;
 	private JPanel trainPanel;
 	private JScrollPane scroll;
 	private JFrame locoPanel, passPanel, freightPanel, boardPanel;
@@ -43,6 +43,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 	JTextPane status_report;
 	private JLabel stockLabel;
 	private JTextField grossWeight_field,freightGrossWeight_field,numberOfSeats_field,locoGrossWeight_field,boardPassengers_field;
+	@SuppressWarnings("rawtypes")
 	private JComboBox engineList, powerList, goodsList;
 	private final int STATUS_REPORT_WIDTH = 150;
 	private final int STATUS_REPORT_HEIGHT= 100;
@@ -72,7 +73,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 	 * @throws HeadlessException
 	 * @throws TrainException
 	 */
-	public GUITest_Ben(String arg0) throws HeadlessException, TrainException {
+	public GUI(String arg0) throws HeadlessException, TrainException {
 		super(arg0);
 		createGUI();
 		
@@ -182,6 +183,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
      * Adds action listener on save button 
      * 
      */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void createAddLoco() {
     	locoPanel = new JFrame("Add locomotive carriage");
     	//2. Optional: What happens when the frame closes?
@@ -300,7 +302,8 @@ public class GUITest_Ben extends JFrame implements ActionListener {
      * goods type (dropdown) and weight (input) also adds action listener on save button 
      * 
      */
-    private void createAddFreight() {
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	private void createAddFreight() {
     	freightPanel = new JFrame("Add freight carriage");
     	freightPanel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     	
@@ -566,7 +569,7 @@ public class GUITest_Ben extends JFrame implements ActionListener {
 	 * @throws HeadlessException
 	 */
 	public static void main(String[] args) throws HeadlessException, TrainException {
-		GUITest_Ben gui = new GUITest_Ben("DumbGraphicsExample");
+		GUI gui = new GUI("Departing Train");
 	    gui.setVisible(true);
 
 	}
