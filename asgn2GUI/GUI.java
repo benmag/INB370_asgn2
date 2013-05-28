@@ -159,17 +159,32 @@ public class GUI extends JFrame implements ActionListener {
 	}
 	
 	private void trainStatus(String error) {
+		
 		RollingStock carriage = currentCarriage;
 		String trainStatus = "";
 		if(carriage != null) {
 			if(myTrain.trainCanMove()) {
 				trainStatus = "Can move: Yes!";
+				status_report.setBackground(Color.white);
+				
 			} else {
 				trainStatus = "Can move: No!";
+				status_report.setBackground(Color.ORANGE);
 			}
 		} else {
 			trainStatus = "Can move: No!";
 		}
+		
+		
+		// check for an error 
+		if(error != "") {
+			status_report.setBackground(Color.red);
+		} else {
+			status_report.setBackground(Color.white);
+		}
+		
+		
+		
 		trainStatus += "\n";
 		trainStatus += "Full: ";
 		int remainingSeats = myTrain.numberOfSeats() - myTrain.numberOnBoard();
